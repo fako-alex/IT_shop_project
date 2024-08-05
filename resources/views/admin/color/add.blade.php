@@ -41,9 +41,6 @@
                             <input type="color" class="form-control"required value="{{old('code')}}" name="code" placeholder="Saisir le code de la couleur EXP:#FFFAG">
                             <div style="color:red">{{$errors->first('code de la couleur')}}</div>
                         </div>
-
-
-
                     
                         <div class="form-groupe">
                             <label >Status</label>

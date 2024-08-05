@@ -46,8 +46,10 @@ Route::group(['middleware'=>'admin'], function(){
     Route::get('admin/sub_category/edit/{id}', [SubCategoryController::class, 'edit']);
     Route::post('admin/sub_category/edit/{id}', [SubCategoryController::class, 'update']);
     Route::get('admin/sub_category/delete/{id}', [SubCategoryController::class, 'delete']);
-    // FIN
-    
+
+    //Route::post('admin/get_sub_category', [SubCategoryController::class, 'get_sub_category']);
+    // FIN 
+
     
     // POUR LES MARQUES
     Route::get('admin/brand/list', [BrandController::class, 'list']);
@@ -69,19 +71,14 @@ Route::group(['middleware'=>'admin'], function(){
    ;
     // FIN
 
-
-
-
-
-
-
-
     // POUR LES PRODUITS
     Route::get('admin/product/list', [ProductController::class, 'list']);
     Route::get('admin/product/add', [ProductController::class, 'add']);
     Route::post('admin/product/add', [ProductController::class, 'insert']);
     Route::get('admin/product/edit/{id}', [ProductController::class, 'edit']);
+    Route::post('admin/product/edit/{id}', [ProductController::class, 'update']);
     // FIN
+
 });
    
 

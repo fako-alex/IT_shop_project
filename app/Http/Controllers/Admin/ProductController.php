@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BrandModel;
+use App\Models\ColorModel;
+use App\Models\ProductColorModel;
+use App\Models\SubCategoryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\CategoryModel;
@@ -13,7 +17,7 @@ class ProductController extends Controller
 {
     public function list()
     {
-       // $data['getRecord'] = SubCategoryModel::getRecord();
+        $data['getRecord'] = ProductModel::getRecord();
         $data['header_title'] = 'List Product';
         return view('admin.product.list', $data); 
     }
@@ -46,19 +50,63 @@ class ProductController extends Controller
     }
 
     public function edit($product_id){
-         // $productModel = new ProductModel();
-        //$product = $productModel->getSingle($product_id);
-       // $product = ProductModel::getSingle($product_id);
 
         $product = ProductModel::getSingle($product_id);
-        if(!empty($product)) {
+        if(!empty($product))
+         {
+            $data['getCategory'] = CategoryModel::getRecordActive();
+            $data['getSubCategory'] = SubCategoryModel::getRecordActive();
+            $data['getBrand'] = BrandModel::getRecordActive();
+            $data['getColor'] = ColorModel::getRecordActive();
             $data['product'] = $product;
+           // $data['get_sub_category'] = SubCategoryModel::getRecordSubCategory($product->category_id);
             $data['header_title'] = 'Edit Product';
             return view('admin.product.edit', $data);
         }else{
-            //return redirect('admin/product/list')->with('error', 'Produit non trouver');
-            echo'une erreur dans la page productcon';
+            abort(404);
         }
     }   
+ 
+    public function update($product_id, Request $request){	
+        //dd($request->all());
+        $product = ProductModel::getSingle($product_id);
+        if(!empty($product))
+        {
+            $product->title = trim($request->title);
+            $product->sku = trim($request->sku);
+            $product->category_id = trim($request->category_id);
+            $product->sub_category_id = trim($request->sub_category_id);
+            $product->brand_id = trim($request->brand_id);
+            //$product->color_id = trim($request->color_id);
+            $product->price = trim($request->price);
+            $product->old_price = trim($request->old_price);
+            //$product->product_price = trim($request->product_price);
+            $product->description = trim($request->description);
+            $product->short_description = trim($request->short_description);
+            $product->additional_information = trim($request->additional_information);
+            $product->shipping_returns = trim($request->shipping_returns);
+            $product->status = trim($request->status);
+            $product->save();
+
+            ProductColorModel::DeleteRecord($product->id);
+
+            if (!empty($request->color_id))
+            {
+                foreach ($request->color_id as $color_id)
+                {
+                    $color = new ProductColorModel;
+                    $color->color_id = $color_id;
+                    $color->product_id = $product->id;
+                    $color->save();
+                }
+
+            }
+
+
+            return redirect()->back()->with('success',"Le produit a été modifier avec succès");
+        }else{
+            abort(404);
+        }
+    }
     
 }

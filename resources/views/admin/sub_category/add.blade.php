@@ -31,14 +31,20 @@
                     {{@csrf_field() }}
 
                     <div class="card-body">
+
                         <div class="form-group">
-                            <label>Nom de la sous catégories <span style="color: red"> *</span></label>
+                            <label>Nom de la catégorie<span style="color: red"> *</span></label>
                             <select class="form-control" name="category_id">
                                 <option value="">Selectionner la Catégorie</option>
                                     @foreach($getCategory as $value)
                                         <option value="{{$value->id}}">{{$value->name}}</option>
                                     @endforeach
                             </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nom de la sous catégories <span style="color: red"> *</span></label>
+                            <input type="text" class="form-control"required value="{{old('name')}}" name="name" placeholder="Saisir le nom de la sous catégorie">
                         </div>
 
                         <div class="form-group">

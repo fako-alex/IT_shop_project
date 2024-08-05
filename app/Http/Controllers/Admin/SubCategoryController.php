@@ -86,4 +86,19 @@ class SubCategoryController extends Controller
         return redirect()->back()->with('success', 'La sous catégorie a été supprimée avec succès');
     }
 
+    public function get_sub_category(Request $request){
+        // dd($request->all());
+        $category_id = $request->id; 
+        $get_sub_category = SubCategoryModel::getRecordSubCategory($category_id);
+        $html = '';
+        $html .= '<option value="">Selectionner</option>';
+        foreach ($get_sub_category as $value) 
+        {
+            $html .= '<option value=" '.$value->id.' ">' .$value->name.'</option>';
+        }
+        $json['html'] = $html;
+        echo json_encode($json);
+    }
+
+    
 }

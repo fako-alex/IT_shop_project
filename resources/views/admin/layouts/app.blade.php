@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ config('app.locale') }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ !empty($header_title) ? $header_title : '' }} | DIGITAL-GABON </title>
-
+  
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -30,7 +30,6 @@
 @yield('style')
 
 <body class="hold-transition sidebar-mini layout-fixed">
-
 
 <div class="wrapper">
     @include('admin.layouts.header')
@@ -71,10 +70,14 @@
 <script src="{{ url('public/assets/dist/js/adminlte.js')}} "></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('public/assets/dist/js/demo.js')}} "></script>
+<script src="{{ url('public/assets/dist/js/pages/dashboard.js')}} "></script>
+<script src="{{ url('public/assets/dist/js/pages/dashboard2.js')}} "></script>
+<script src="{{ url('public/assets/dist/js/pages/dashboard3.js')}} "></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 
-@yield('script')
+@yield('scripts')
 
 </body>
 </html>

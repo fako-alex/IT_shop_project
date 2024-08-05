@@ -30,14 +30,10 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Nom sous catégorie </th>
-                          <th>Nom de la catégorie </th>
-                          <th>Nom du Slug</th>
-                          <th>Status catégoies</th>
-                          <th>Meta titre</th>
+                          <th>Nom produit</th>
+                          <th>Nom Slug</th>
                           <th>Créer par </th>
-                          <th>Meta description</th>
-                          <th>Meta keywords</th>
+                          <th>Status catégoies</th>
                           <th>Date de création</th>
                           <th>Heure de création</th>
                           <th>Actions</th>
@@ -45,15 +41,47 @@
                         </tr>
                       </thead>
                       <tbody>
-                        
+                        {{-- @foreach ($getRecord as $key => $value)
+                        <tr>
+                            <td>{{ $getRecord->firstItem() + $key }}</td>
+                            <td>{{ $value->title }}</td>
+                            <td>{{ $value->slug }}</td>
+                            <td>{{ $value->created_by_name }}</td>
+                            <td>{{ ($value->status == 0) ? 'Actif' : 'Inactif' }}</td>
+                            <td>{{ date('d-m-y', strtotime($value->created_at)) }}</td>
+                            <td>{{ date('H:i:s', strtotime($value->created_at)) }}</td>
+                            <td>
+                                <a href="{{ url('admin/product/edit/'.$value->id) }}" class="btn btn-primary">Modifier</a>
+                                <a href="{{ url('admin/product/delete/'.$value->id) }}" class="btn btn-danger">Supprimer</a>
+                            </td>
+                        </tr>
+                        @endforeach --}}
+                        @foreach ($getRecord as $key => $value)
+                          <tr>
+                              <td>{{ $getRecord->firstItem() + $key }}</td>
+                              <td>{{ $value->title }}</td>
+                              <td>{{ $value->slug }}</td>
+                              <td>{{ $value->created_by_name }}</td>
+                              <td>{{ ($value->status == 0) ? 'Actif' : 'Inactif' }}</td>
+                              <td>{{ date('d-m-y', strtotime($value->created_at)) }}</td>
+                              <td>{{ date('H:i:s', strtotime($value->created_at)) }}</td>
+                              <td>
+                                  <a href="{{ url('admin/product/edit/'.$value->id) }}" class="btn btn-primary">Modifier</a>
+                                  <a href="{{ url('admin/product/delete/'.$value->id) }}" class="btn btn-danger">Supprimer</a>
+                              </td>
+                          </tr>
+                        @endforeach
+                    
+                    
                       </tbody>
                     </table>
 
-                    {{-- <div style="padding: 10px; float:right;">
-                      {{ $getRecord->appends(request()->except('page'))->links() }}
-                  </div> --}}
-                  
-
+                    <div style="padding: 10px; float:right;">
+                      {!! $getRecord->appends(request()->except('page'))->links() !!}
+                    </div>
+                      {{-- <div style="padding: 10px; float:right;">
+                        {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page')->links()) !!}
+                      </div> --}}
                   </div>
                   <!-- /.card-body -->
                 </div>

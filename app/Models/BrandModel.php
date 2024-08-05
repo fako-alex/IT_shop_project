@@ -18,6 +18,15 @@ class BrandModel extends Model
         ->orderBy('brand.id', 'desc')
         ->get();
     }
+    static public function getRecordActive()
+    {
+        return self::select('brand.*')
+        ->join('users', 'users.id', '=', 'brand.created_by')
+        ->where('brand.is_delete', '=', 0)
+        ->where('brand.status', '=', 0)
+        ->orderBy('brand.name', 'asc')
+        ->get();
+    }
 
     static public function getSingle($id)
     {

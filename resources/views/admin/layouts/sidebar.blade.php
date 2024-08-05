@@ -121,37 +121,7 @@
                 </li>     
               </ul>
             </li>
-
-
-            <!-- Gestion des produits-->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-hospital"></i>
-                <p>
-                  Produits
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview" style="display: none;">
-                <li class="nav-item">
-                  <a href="{{url ('admin/product/list')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Liste des Produits
-                  </p>
-                  </a>
-                </li> 
-                <li class="nav-item">
-                  <a href="{{url('admin/product/add')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Ajout des Produits
-                  </p>
-                  </a>
-                </li>                            
-              </ul>
-            </li>
-
+            
 
             <!-- Gestion des marques-->
             <li class="nav-item">
@@ -247,7 +217,7 @@
               <a href="#" class="nav-link @if(Request::segment(2) == 'product') active @endif">
               <i class="nav-icon fas fa-hospital"></i>
               <p>
-                  Pppppp
+                  ................
               </p>
               </a>
           </li>  
