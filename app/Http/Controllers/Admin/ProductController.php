@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandModel;
 use App\Models\ColorModel;
 use App\Models\ProductColorModel;
+use App\Models\ProductSizeModel;
 use App\Models\SubCategoryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -102,7 +103,26 @@ class ProductController extends Controller
 
             }
 
+            ProductSizeModel::DeleteRecord($product->id);
 
+            if (!empty($request->size))
+            {
+                foreach ($request->size as $size)
+                {   //dd($size['name']);
+                    //dd($request->all());
+
+                    if(!empty($size['name']))
+                    {
+                        $saveSize = new ProductSizeModel;
+                        $saveSize->name = $size['name'];
+                        $saveSize->price = !empty($size['price']) ? $size['price'] : 0;
+                        $saveSize->product_id = $product->id;
+                        $saveSize->save();
+                    }
+                }
+
+            }
+//dd($request->all());
             return redirect()->back()->with('success',"Le produit a été modifier avec succès");
         }else{
             abort(404);

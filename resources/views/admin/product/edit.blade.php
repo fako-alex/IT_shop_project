@@ -124,7 +124,7 @@
                           <div class="col-md-6">
                             <div class="form-group">
                               <label>Prix du produit (FCFA) <span style="color: red"> *</span></label>
-                              <input type="text" class="form-control" required name="price" placeholder="Prix du produit" value="{{$product->price}}">
+                              <input type="text" class="form-control" required name="price" placeholder="Prix du produit" value="{{!empty ($product->price) ? $product->price : ''}}">
                               <div style="color:red">{{ $errors->first('price') }}</div>
                             </div>
                           </div>
@@ -132,40 +132,64 @@
                           <div class="col-md-6">
                             <div class="form-group">
                               <label>Ancien Prix du produit (FCFA)<span style="color: red"> *</span></label>
-                              <input type="text" class="form-control" required name="old_price" placeholder="Ancien Prix du produit" value="{{$product->old_price}}">
+                              <input type="text" class="form-control" required name="old_price" placeholder="Ancien Prix du produit" value="{{!empty ($product->old_price) ? $product->old_price : ''}}">
                               <div style="color:red">{{ $errors->first('old_price') }}</div>
                             </div>
                           </div>
                         </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
+                        <div class="row">
+                          <div class="col-md-12">
+                              <div class="form-group">
                                   <label>Taille du Produit<span style="color: red"> *</span></label>
                                   <table class="table table-striped">
-                                    <thead>
-                                      <tr>
-                                          <th>Name</th>
-                                          <th>Prix (FCFA)</th>
-                                          <th>Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody id="AppendSize">
-                                      <tr>
-                                        <td>
-                                            <input type="text" placeholder="exp : Une chemise" name="size[100][name]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" placeholder="100000" name="size[100][price]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary AddSize">Ajouter</button>
-                                        </td>
-                                      </tr>
-                                    </tbody>
+                                      <thead>
+                                          <tr>
+                                              <th>Name</th>
+                                              <th>Prix (FCFA)</th>
+                                              <th>Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="AppendSize">
+                                          @php
+                                          $i_s = 1;
+                                          @endphp
+                                          @foreach($product->getSize as $size)
+                                          <tr id="DeleteSize{{$i_s}}">
+                                              <td>
+                                                  <input type="text" value="{{$size->name}}" name="size[{{$i_s}}][name]" class="form-control">
+                                              </td>
+                                              <td>
+                                                  <input type="text" value="{{$size->price}}" name="size[{{$i_s}}][price]" class="form-control">
+                                              </td>
+                                              <td>
+                                                  <button type="button" id="{{$i_s}}" class="btn btn-danger DeleteSize">Supprimer</button>
+                                              </td>
+                                          </tr>
+                                          @php
+                                          $i_s++;
+                                          @endphp
+                                          @endforeach
+                                      </tbody>
+                                      <tfoot>
+                                          <tr>
+                                              <td>
+                                                  <input type="text" name="size[{{$i_s}}][name]" class="form-control">
+                                              </td>
+                                              <td>
+                                                  <input type="text" name="size[{{$i_s}}][price]" class="form-control">
+                                              </td>
+                                              <td>
+                                                  <button type="button" class="btn btn-primary AddSize">Ajouter</button>
+                                              </td>
+                                          </tr>
+                                      </tfoot>
                                   </table>
-                                </div>
-                            </div>
+                              </div>
                           </div>
+                      </div>
+                      
+                      
+                      
 
                           <div class="row">
                             <div class="col-md-12">
@@ -264,35 +288,48 @@
   });
 </script> --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@1/dist/tinymce-jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@1/dist/tinymce-jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        var i = 100;
+  $(document).ready(function() {
+    var i = {{$i_s}}; // Initialiser avec la valeur actuelle du compteur
 
-        $('body').on('click', '.DeleteSize', function() {
-            var id = $(this).attr('id');
-            $('#DeleteSize' + id).remove();
-        });
+    // Fonction pour supprimer une ligne
+    $('body').on('click', '.DeleteSize', function() {
+        var id = $(this).attr('id');
+        $('#DeleteSize' + id).remove();
+    });
 
-        $('body').on('click', '.AddSize', function() {
+    // Fonction pour ajouter une nouvelle ligne
+    $('body').on('click', '.AddSize', function() {
+        i++; // Incrémenter le compteur
+
+        // Copier les valeurs saisies dans une nouvelle ligne
+        var nameValue = $(this).closest('tr').find('input[name$="[name]"]').val();
+        var priceValue = $(this).closest('tr').find('input[name$="[price]"]').val();
+
+        if (nameValue !== '' && priceValue !== '') {
             var html = `
                 <tr id="DeleteSize${i}">
                     <td>
-                        <input type="text" placeholder="exp : Une chemise" name="size[${i}][name]" class="form-control">
+                        <input type="text" value="${nameValue}" name="size[${i}][name]" class="form-control">
                     </td>
                     <td>
-                        <input type="text" placeholder="100.000" name="size[${i}][size]" class="form-control">
+                        <input type="text" value="${priceValue}" name="size[${i}][price]" class="form-control">
                     </td>
                     <td>
                         <button type="button" id="${i}" class="btn btn-danger DeleteSize">Supprimer</button>
                     </td>
                 </tr>`;
-            i++;
-            $('#AppendSize').append(html);
-        });
-    });
 
+            // Ajouter la nouvelle ligne au tableau
+            $('#AppendSize').append(html);
+
+            // Vider les champs de saisie pour la nouvelle entrée
+            $(this).closest('tr').find('input').val('');
+        }
+    });
+  });
     
   $(function () {
     //Add text editor
