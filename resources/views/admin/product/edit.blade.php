@@ -26,7 +26,7 @@
                   <!-- /.card-header -->
                   <!-- form start -->
                   
-                  <form action="" method="post">
+                  <form action="" method="post" enctype="multipart/form-data">
                       {{@csrf_field() }}
 
                       <div class="card-body">
@@ -187,51 +187,78 @@
                               </div>
                           </div>
                       </div>
-                      
-                      
-                      
 
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>Description<span style="color: red"> *</span></label>
-                                  <textarea id="compose-textarea1" name="description" placeholder="Saisir la description du produit"  class="form-control" cols="30" rows="10">
-                                    {{$product->description}}
-                                  </textarea>
-                              </div>
-                            </div>
-                          </div>
+                      <hr />
 
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>Brève description<span style="color: red"> *</span></label>
-                                  <textarea id="compose-textarea4" name="short_description" placeholder="Saisir une brève description du produit"  class="form-control" cols="30" rows="10">
-                                    {{$product->short_description}}
-                                  </textarea>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>informations suplémentaire<span style="color: red"> *</span></label>
-                                  <textarea id="compose-textarea2" name="additional_information" placeholder="Saisir les informations supplémentaires"  class="form-control" cols="30" rows="10">
-                                    {{$product->additional_information}}
-                                  </textarea>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Expédition & retours<span style="color: red"> *</span></label>
-                              <textarea id="compose-textarea" name="shipping_returns" placeholder="Saisir les informations supplémentaires pour l'expédition du produit" class="form-control" cols="30" rows="10">
-                                {{$product->shipping_returns}}
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Description<span style="color: red"> *</span></label>
+                              <textarea id="compose-textarea1" name="description" placeholder="Saisir la description du produit"  class="form-control" cols="30" rows="10">
+                                {{$product->description}}
                               </textarea>
-                            </div>
                           </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Brève description<span style="color: red"> *</span></label>
+                              <textarea id="compose-textarea4" name="short_description" placeholder="Saisir une brève description du produit"  class="form-control" cols="30" rows="10">
+                                {{$product->short_description}}
+                              </textarea>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr />
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" name="image[]" multiple class="form-control" style="padding: 5px">
+                          </div>
+                        </div>
+                      </div>
+
+                      @if(!empty($product->getImage->count()))
+                        <div class="row">
+                          @foreach($product->getImage as $image)
+                            @if(!empty($image->getLogo()))
+                              <div class="col-md-2">
+                                <img src="{{ $image->getLogo()}}" style="width: 100%; height: 100px;">
+                                {{-- s<button type="button" data-id="{{$image->id}}" class="btn btn-danger DeleteImage">Supprimer</button> --}}
+                              </div>
+                            @endif
+                          @endforeach
+                        </div>
+                       
+                      @endif
+
+                      <hr />
+                      
+
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Expédition & retours<span style="color: red"> *</span></label>
+                          <textarea id="compose-textarea" name="shipping_returns" placeholder="Saisir les informations supplémentaires pour l'expédition du produit" class="form-control" cols="30" rows="10">
+                            {{$product->shipping_returns}}
+                          </textarea>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                              <label>informations suplémentaire<span style="color: red"> *</span></label>
+                              <textarea id="compose-textarea2" name="additional_information" placeholder="Saisir les informations supplémentaires"  class="form-control" cols="30" rows="10">
+                                {{$product->additional_information}}
+                              </textarea>
+                          </div>
+                        </div>
+                      </div>
                         
                       <hr />    
                       

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
+use App\Models\ProductImageModel;
 use Auth;
 
 class ProductController extends Controller
@@ -72,7 +73,8 @@ class ProductController extends Controller
         //dd($request->all());
         $product = ProductModel::getSingle($product_id);
         if(!empty($product))
-        {
+        {   
+
             $product->title = trim($request->title);
             $product->sku = trim($request->sku);
             $product->category_id = trim($request->category_id);
@@ -122,10 +124,84 @@ class ProductController extends Controller
                 }
 
             }
-//dd($request->all());
-            return redirect()->back()->with('success',"Le produit a été modifier avec succès");
-        }else{
-            abort(404);
+
+        //     if (!empty($request->file('image')))
+        //     {
+
+        //         foreach($request->file('image') as $value)
+        //         {
+
+        //             if ($value->isValid())
+        //             {
+
+        //                 $ext = $value->getClientOriginalExtension();
+        //                 $randomStr = $product->id.Str::random(20);
+        //                 $filename = strtolower($randomStr).'.'.$ext;
+        //                 $value->move('uploads/products/', $filename);
+
+        //                 $imageupload = new ProductImageModel;
+        //                 $imageupload->image_name = $filename;
+        //                 $imageupload->image_extension = $ext;
+        //                 $imageupload->product_id = $product->id;
+        //                 $imageupload->save();
+                        
+        //             }
+        //         }
+        //     }
+
+        // return redirect()->back()->with('success',"Le produit a été modifier avec succès");
+        // }
+        // else
+        // {
+        //     abort(404);
+        // }
+
+
+
+        if ($request->hasFile('image')) { // Vérifie si des fichiers ont été uploadés
+
+            // Vérifie et crée le dossier s'il n'existe pas
+            if (!is_dir(public_path('uploads/products'))) {
+                mkdir(public_path('uploads/products'), 0755, true);
+            }
+        
+            foreach ($request->file('image') as $index => $file) {
+                if ($file->isValid()) { // Vérifie si le fichier est valide
+                    $ext = $file->getClientOriginalExtension(); // Récupère l'extension du fichier
+                    $randomStr = $product->id . '_' . Str::random(20); // Génère un nom de fichier unique
+                    $filename = strtolower($randomStr) . '.' . $ext; // Construit le nom du fichier
+        
+                    try {
+                        // Tente de déplacer le fichier dans le dossier 'uploads/products/'
+                        $file->move(public_path('uploads/products/'), $filename);
+        
+                        // Enregistre l'image dans la base de données
+                        $imageupload = new ProductImageModel;
+                        $imageupload->product_id = $product->id;
+                        $imageupload->image_name = $filename;
+                        $imageupload->image_extension = $ext;
+                        $imageupload->order_by = $index + 1; // Utilisation de l'index pour l'ordre
+                        $imageupload->created_at = now(); // Date de création
+                        $imageupload->updated_at = now(); // Date de mise à jour
+                        $imageupload->save();
+                    } catch (\Exception $e) {
+                        // Gestion de l'erreur si le déplacement échoue
+                        return back()->withErrors(['error' => 'Erreur lors du téléchargement de l\'image: ' . $e->getMessage()]);
+                    }
+                }
+            }
+        }
+        
+        // Redirige avec un message de succès
+        return redirect()->back()->with('success', "Le produit a été modifié avec succès");
+        
+
+    
+
+
+
+
+        
         }
     }
     

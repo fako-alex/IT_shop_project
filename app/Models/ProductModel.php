@@ -31,7 +31,16 @@ class ProductModel extends Model
     public function getColor(){
         return $this->hasMany(ProductColorModel::class,"product_id");
     }
+
+
     public function getSize(){
         return $this->hasMany(ProductSizeModel::class,"product_id");
     }
+
+
+    public function getImage(){
+        return $this->hasMany(ProductImageModel::class,"product_id");
+    }
+
+    
 }
