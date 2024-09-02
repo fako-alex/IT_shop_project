@@ -13,9 +13,9 @@ class ProductImageModel extends Model
     public function getLogo()
     {
         //dd($this->all());
-        if(!empty($this->image_name) && file_exists('uploads/products/'.$this->image_name)) 
+        if(!empty($this->image_name) && file_exists('public/uploads/products/'.$this->image_name)) 
         {
-            return url('uploads/products/'.$this->image_name);
+            return url('public/uploads/products/'.$this->image_name);
         }
         else
         {

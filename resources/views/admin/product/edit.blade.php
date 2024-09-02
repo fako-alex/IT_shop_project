@@ -229,7 +229,7 @@
                             @if(!empty($image->getLogo()))
                               <div class="col-md-2">
                                 <img src="{{ $image->getLogo()}}" style="width: 100%; height: 100px;">
-                                {{-- s<button type="button" data-id="{{$image->id}}" class="btn btn-danger DeleteImage">Supprimer</button> --}}
+                                <button type="button" data-id="{{$image->id}}" class="btn btn-danger DeleteImage">Supprimer</button>
                               </div>
                             @endif
                           @endforeach
