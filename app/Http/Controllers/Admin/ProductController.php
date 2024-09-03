@@ -195,14 +195,32 @@ class ProductController extends Controller
         // Redirige avec un message de succès
         return redirect()->back()->with('success', "Le produit a été modifié avec succès");
         
-
-    
-
-
-
-
-        
         }
     }
     
+    // public function image_delete($id){
+    //     $image = ProductImageModel::getSingle($id);
+    //     if(!empty($image->getLogo())){
+    //         unlink('public/uploads/products/'.$image->image_deleted); 
+    //     }
+    //     $image->delete();
+    //     return redirect()->back()->with('success', "L'image du produit a été supprimé avec succès");
+       
+    // }
+    
+    public function image_delete($id) {
+        $image = ProductImageModel::getSingle($id);
+        if ($image && !empty($image->getLogo())) {
+            $imagePath = public_path('uploads/products/' . $image->getLogo());
+            if (file_exists($imagePath)) {
+                if (!unlink($imagePath)) {
+                    return redirect()->back()->with('error', "Erreur lors de la suppression de l'image");
+                }
+            }
+        }
+        $image->delete();
+        return redirect()->back()->with('success', "L'image du produit a été supprimée avec succès");
+    }
+    
+ 
 }

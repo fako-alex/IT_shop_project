@@ -224,12 +224,12 @@
                       </div>
 
                       @if(!empty($product->getImage->count()))
-                        <div class="row">
+                        <div class="row" id="sortable">
                           @foreach($product->getImage as $image)
                             @if(!empty($image->getLogo()))
-                              <div class="col-md-2">
+                              <div class="col-md-2 sortable_image" id="{{ $image->id}}" style="text-align: center">
                                 <img src="{{ $image->getLogo()}}" style="width: 100%; height: 100px;">
-                                <button type="button" data-id="{{$image->id}}" class="btn btn-danger DeleteImage">Supprimer</button>
+                                <a onclick="return confirm('voulez-vous supprimer cette image?');" href="{{ url('admin/product/image_delete/'.$image->id) }}" style="margin-top: 10px" class="btn btn-danger btn-sm ">Supprimer</a>
                               </div>
                             @endif
                           @endforeach

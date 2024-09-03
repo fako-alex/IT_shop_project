@@ -10,6 +10,10 @@ class ProductImageModel extends Model
     use HasFactory;
     protected $table = 'product_image';
 
+    static public function getSingle($id){
+        return self::find($id);
+    }
+
     public function getLogo()
     {
         //dd($this->all());
