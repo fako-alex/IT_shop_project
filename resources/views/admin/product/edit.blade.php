@@ -317,9 +317,38 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@1/dist/tinymce-jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ url('public/sortable/jquery-ui.js')}}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     var i = {{$i_s}}; // Initialiser avec la valeur actuelle du compteur
+
+    $('#sortable').sortable({
+
+      update: function(event, ui) {
+        var photo_id = new Array();
+        $('.sortable_image').each(function(){
+          var id = $(this).attr('id');
+          photo_id.push(id);
+        });
+
+        $.ajax({
+          type: 'POST',
+          url: "{{ url('admin/product_image_sortable') }}",
+          data: {
+            "photo_id": photo_id,
+            "_token": "{{ csrf_token() }}"
+          },
+          dataType: 'json',
+          success: function(data) {
+            //rien
+          },
+          error: function(data) {
+            //console.error('Error:', error);
+          }
+        });
+        //console.log(photo_id);
+      }
+    });
 
     // Fonction pour supprimer une ligne
     $('body').on('click', '.DeleteSize', function() {
