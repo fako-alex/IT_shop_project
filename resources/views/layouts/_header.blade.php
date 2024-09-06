@@ -59,48 +59,38 @@
                         </li>
 
                         <li>
-                            <a href="category.html" class="sf-with-ul">Boutique</a>
+                            <a href="javascript:;" class="sf-with-ul">Boutique</a>
 
                             <div class="megamenu megamenu-md">
                                 <div class="row no-gutters">
                                     <div class="col-md-12">
                                         <div class="menu-col">
                                             <div class="row">
-
-                                                @for($i = 0; $i <=5; $i++)   
-                                                    <div class="col-md-4">
-                                                        <div class="menu-title">Shop with sidebar</div>
+                                                @php
+                                                    $getCategoryHeader = App\Models\CategoryModel::getRecordMenu();
+                                                @endphp
+                            
+                                                @foreach($getCategoryHeader as $value_header_category)
+                                                    <div class="col-md-4" style="margin-bottom: 20px">
+                                                        <a href="{{ url($value_header_category->slug) }}" class="menu-title">{{ $value_header_category->name }}</a>
+                                                        
                                                         <ul>
-                                                            <li><a href="category-list.html">Shop List</a></li>
-                                                            <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                                            <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                                            <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                                            <li><a href="category-market.html"><span>Shop Market<span class="tip tip-new">New</span></span></a></li>
+                                                            @foreach($value_header_category->getSubCategory as $value_header_subcategory)
+                                                                <li>
+                                                                    <a href="{{ url($value_header_category->slug.'/'.$value_header_subcategory->slug) }}">
+                                                                        {{ $value_header_subcategory->name }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
                                                         </ul>
                                                     </div>
-
-                                                @endfor
-                                                {{-- <div class="col-md-4">
-                                                    <div class="menu-title">Product Category</div>
-                                                    <ul>
-                                                        <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                                        <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
-                                                    </ul>
-                                                    <div class="menu-title">Shop Pages</div>
-                                                    <ul>
-                                                        <li><a href="cart.html">Cart</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
-                                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                                        <li><a href="dashboard.html">My Account</a></li>
-                                                        <li><a href="#">Lookbook</a></li>
-                                                    </ul>
-                                                </div> --}}
-
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         </li>
 
                         {{-- <li>

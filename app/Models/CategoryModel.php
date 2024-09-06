@@ -36,4 +36,23 @@ class CategoryModel extends Model
         ->get();
         //->paginate(10);
     }
+
+    public static function getRecordMenu()
+    {
+        return self::select('category.*')
+            ->join('users', 'users.id', '=', 'category.created_by')
+            ->where('category.is_delete', '=', 0)
+            ->where('category.status', '=', 0)
+            ->with('getSubCategory') // Charger les sous-catégories associées
+            ->get();
+    }
+
+    public function getSubCategory()
+{
+    return $this->hasMany(SubCategoryModel::class, "category_id")
+        ->where('status', '=', 0)
+        ->where('is_delete', '=', 0);
+}
+
+
 }
