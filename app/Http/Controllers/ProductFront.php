@@ -21,7 +21,6 @@ class ProductFront extends Controller
             $data['meta_description'] = $getSubCategory->meta_description;
             $data['meta_keywords'] = $getSubCategory->meta_keywords;
 
-
             $data['getSubCategory'] = $getSubCategory;
             $data['getCategory'] = $getCategory;
 
