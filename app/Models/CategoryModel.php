@@ -9,7 +9,6 @@ class CategoryModel extends Model
 {
     use HasFactory;
     protected $table = 'category';
-    //protected $table = ['category'];
 
     static public function getSingle($id)
     {
@@ -54,5 +53,9 @@ class CategoryModel extends Model
         ->where('is_delete', '=', 0);
 }
 
+static public function getSingleSlug($slug)
+    {
+        return self::where('slug', '=', $slug)->where('category.status', '=', 0)->where('category.is_delete', '=', 0)->first();
+    } 
 
 }

@@ -71,19 +71,21 @@
                                                 @endphp
                             
                                                 @foreach($getCategoryHeader as $value_header_category)
-                                                    <div class="col-md-4" style="margin-bottom: 20px">
-                                                        <a href="{{ url($value_header_category->slug) }}" class="menu-title">{{ $value_header_category->name }}</a>
-                                                        
-                                                        <ul>
-                                                            @foreach($value_header_category->getSubCategory as $value_header_subcategory)
-                                                                <li>
-                                                                    <a href="{{ url($value_header_category->slug.'/'.$value_header_subcategory->slug) }}">
-                                                                        {{ $value_header_subcategory->name }}
-                                                                    </a>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
+                                                    @if(!empty($value_header_category->getSubCategory->Count()))
+                                                        <div class="col-md-4" style="margin-bottom: 20px">
+                                                            <a href="{{ url($value_header_category->slug) }}" class="menu-title">{{ $value_header_category->name }}</a>
+                                                            
+                                                            <ul>
+                                                                @foreach($value_header_category->getSubCategory as $value_header_subcategory)
+                                                                    <li>
+                                                                        <a href="{{ url($value_header_category->slug.'/'.$value_header_subcategory->slug) }}">
+                                                                            {{ $value_header_subcategory->name }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>

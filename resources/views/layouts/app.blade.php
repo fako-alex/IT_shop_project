@@ -5,9 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>DG_SHOP.COM/eCommerce</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
+
+    <title>{{ !empty($meta_title) ? $meta_title : ''}} </title>
+
+    @if(!empty($meta_description))
+        <meta name="description" content="{{ $meta_description }}">
+    @endif
+
+    @if(!empty($meta_keywords))
+        <meta name="keywords" content="{{ $meta_keywords }}">
+    @endif
+
     <link rel="shortcut icon" href="{{ url('assets/images/icons/favicon.ico')}}">
     <link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ url('assets/css/plugins/owl-carousel/owl.carousel.css')}}">
@@ -78,23 +86,7 @@
                                             <a href="#" class="forgot-link">Mot de passe oublié?</a>
                                         </div>
                                     </form>
-                                    {{-- <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div> --}}
+                            
                                 </div>
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
                                     <form action="#">
@@ -120,23 +112,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    {{-- <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login  btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div> --}}
+                                
                                 </div>
                             </div>
                         </div>
@@ -171,7 +147,7 @@
                         </div>
                     </div>
                     <div class="col-xl-2-5col col-lg-5 ">
-                        <img src="assets/images/popup/newsletter/img-1.jpg" class="newsletter-img" alt="newsletter">
+                        <img src="{{ url('assets/images/popup/newsletter/img-1.jpg')}}" class="newsletter-img" alt="newsletter">
                     </div>
                 </div>
             </div>
