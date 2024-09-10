@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CategoryModel;
 use App\Models\SubCategoryModel;
-use APP\Models\ProductModel;
+use App\Models\ProductModel;
 use Illuminate\Http\Request;
 
 class ProductFront extends Controller
@@ -24,8 +24,8 @@ class ProductFront extends Controller
             $data['getSubCategory'] = $getSubCategory;
             $data['getCategory'] = $getCategory;
 
-            // $data['getProduct'] = ProductModel::getProduct($getCategory->id, $getSubCategory->id);
-
+            $data['getProduct'] = ProductModel::getProduct($getCategory->id, $getSubCategory->id);
+            // dd($data['getProduct']);
             return view('product.list', $data);
         } 
         elseif(!empty($getCategory)){
@@ -36,7 +36,7 @@ class ProductFront extends Controller
             $data['meta_description'] = $getCategory->meta_description;
             $data['meta_keywords'] = $getCategory->meta_keywords;
 
-            // $data['getProduct'] = ProductModel::getProduct($getCategory->id);
+            $data['getProduct'] = ProductModel::getProduct($getCategory->id);
 
             return view('product.list', $data);
         }
@@ -44,16 +44,4 @@ class ProductFront extends Controller
             abort(404);
         }
     }
-
-
-
-    // public function getCategory($slug){
-        
-    //     return view('product.list');
-    //     // if(!empty($slug)){
-    //     // }
-    //     // else{
-    //     //     abort(404);
-    //     // }
-    // }
 }
