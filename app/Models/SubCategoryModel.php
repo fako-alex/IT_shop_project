@@ -41,4 +41,18 @@ class SubCategoryModel extends Model
     {
         return self::where('slug', '=', $slug)->where('sub_category.status', '=', 0)->where('sub_category.is_delete', '=', 0)->first();
     } 
+
+    static public function getRecordSubCategory($category_id){
+        return self::select('sub_category.*')
+        ->join('users', 'users.id', '=', 'sub_category.created_by')
+        ->where('sub_category.is_delete', '=', 0)
+        ->where('sub_category.status', '=', 0)
+        ->where('sub_category.category_id', '=', $category_id)
+        ->orderBy('sub_category.name', 'asc')
+        ->get();
+    }
+
+    public function TotalProduct(){
+        return $this->hasMany(ProductModel::class, 'sub_category_id')->where('product.is_delete', '=', 0)->where('product.status', '=', 0)->count();
+    }
 }

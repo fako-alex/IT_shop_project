@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ url('assets/css/plugins/owl-carousel/owl.carousel.css')}}">
     <link rel="stylesheet" href="{{ url('assets/css/plugins/magnific-popup/magnific-popup.css')}}">
     <link rel="stylesheet" href="{{ url('assets/css/style.css')}}">
+    @yield('style')
 </head>
 
 <body>
@@ -123,7 +124,7 @@
     </div>
     
 
-    <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
+    {{-- <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
         <div class="row justify-content-center">
             <div class="col-10">
                 <div class="row no-gutters bg-white newsletter-popup-content">
@@ -152,8 +153,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Plugins JS File -->
+    </div> --}}
+    <!--ajout d'email pour recevoir la newsLater -->
     <script src="{{ url('assets/js/jquery.min.js')}}"></script>
     <script src="{{ url('assets/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ url('assets/js/jquery.hoverIntent.min.js')}}"></script>
@@ -161,6 +162,8 @@
     <script src="{{ url('assets/js/superfish.min.js')}}"></script>
     <script src="{{ url('assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{ url('assets/js/jquery.magnific-popup.min.js')}}"></script>
+    
+    @yield('script')
     <!-- Main JS File -->
     <script src="{{ url('assets/js/main.js')}}"></script>
 </body>
