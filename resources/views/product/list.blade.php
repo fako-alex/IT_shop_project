@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('style')
     <link rel="stylesheet" href="{{ url('assets/css/plugins/nouislider/nouislider.css')}}"> 
+    <style type="text/css">
+     .active-color{
+        border: 3px solid #0c335c !important;
+     }
+    </style>
 @endsection
 @section('content')
      
@@ -46,8 +51,9 @@
                             <div class="toolbox-sort">
                                 <label for="sortby">Sort by:</label>
                                 <div class="select-custom">
-                                    <select name="sortby" id="sortby" class="form-control">
-                                        <option value="popularity" selected="selected">Most Popular</option>
+                                    <select name="sortby" id="sortby" class="form-control ChangeSortBy">
+                                        <option value="">Select</option>
+                                        <option value="popularity">Most Popular</option>
                                         <option value="rating">Most Rated</option>
                                         <option value="date">Date</option>
                                     </select>
@@ -115,6 +121,13 @@
                     </div>
                 </div>
                 <aside class="col-lg-3 order-lg-first">
+                    <form id="FilterForm" method="post" action="">
+                        <input type="text" name="sub_category_id" id="get_sub_category_id">
+                        <input type="text" name="brand_id" id="get_brand_id">
+                        <input type="text" name="color_id" id="get_color_id">
+                        <input type="text" name="sort_by_id" id="get_sort_by_id">
+
+                    </form>
                     <div class="sidebar sidebar-shop">
                         <div class="widget widget-clean">
                             <label>Filtres:</label>
@@ -137,7 +150,7 @@
                                         @foreach($getSubCategoryFilter as $filtre_category)
                                         <div class="filter-item">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="cat-{{ $filtre_category->id}}">
+                                                <input type="checkbox" class="custom-control-input ChangeCategory" value="{{ $filtre_category->id}}" id="cat-{{ $filtre_category->id}}">
                                                 <label class="custom-control-label" for="cat-{{ $filtre_category->id}}">{{ $filtre_category->name}}</label>
                                             </div>
                                             <span class="item-count">{{ $filtre_category->TotalProduct()}} </span>
@@ -224,7 +237,7 @@
                                 <div class="widget-body">
                                     <div class="filter-colors">
                                         @foreach($getColor as $filter_color)
-                                        <a href="javascript:;" style="background: {{ $filter_color->code}}"><span class="sr-only">{{$filter_color->name}}</span></a>
+                                        <a href="javascript:;" id="{{ $filter_color->id}}" class="ChangeColor" data-val="0" style="background: {{ $filter_color->code}}"><span class="sr-only">{{$filter_color->name}}</span></a>
                                         @endforeach
                                     </div>
                                 </div>
@@ -248,7 +261,7 @@
                                         @foreach($getBrand as $filter_brand)
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="brand-{{ $filter_brand->id}}">
+                                                    <input type="checkbox" class="custom-control-input ChangeBrand" value="{{ $filter_brand->id}}"  id="brand-{{ $filter_brand->id}}">
                                                     <label class="custom-control-label" for="brand-{{ $filter_brand->id}}">{{ $filter_brand->name}}</label>
                                                 </div>
                                             </div>
@@ -275,16 +288,15 @@
                                         <div class="filter-price-text">
                                             Prix compris entre :
                                             <span id="filter-price-range"></span>
-                                        </div><!-- End .filter-price-text -->
-
-                                        <div id="price-slider"></div><!-- End #price-slider -->
-                                    </div><!-- End .filter-price -->
-                                </div><!-- End .widget-body -->
-                            </div><!-- End .collapse -->
-                        </div><!-- End .widget -->
-                    </div><!-- End .sidebar sidebar-shop -->
-                </aside><!-- End .col-lg-3 -->
-            </div><!-- End .row -->
+                                        </div>
+                                        <div id="price-slider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
 </main>
@@ -294,5 +306,62 @@
     <script src="{{ url('assets/js/wNumb.js')}}"></script>
     <script src="{{ url('assets/js/bootstrap-input-spinner.js')}}"></script>
     <script src="{{ url('assets/js/nouislider.min.js')}}"></script> 
+    <script type="text/javascript">
+
+$(document).ready(function() {
+    $('.ChangeSortBy').change(function() {
+        var id = $(this).val();
+        $('#get_sort_by_id').val(id); 
+    });
+
+    $('.ChangeCategory').change(function() {
+        var ids = '';
+        $('.ChangeCategory').each(function() {
+            if (this.checked) {
+                var id = $(this).val();
+                ids += id + ',';
+            }
+        });
+        $('#get_sub_category_id').val(ids);
+    });
+
+    $('.ChangeBrand').change(function() {
+        var ids = '';
+        $('.ChangeBrand').each(function() {
+            if (this.checked) {
+                var id = $(this).val();
+                ids += id + ',';
+            }
+        });
+        $('#get_brand_id').val(ids);
+    });
+
+    $('.ChangeColor').click(function() {
+        var $this = $(this);
+        var status = $this.attr('data-val');
+        if (status == 0) {
+            $this.attr('data-val', 1);
+            $this.addClass('active-color');
+        } else {
+            $this.attr('data-val', 0);
+            $this.removeClass('active-color');
+        }
+
+        var ids = '';
+        $('.ChangeColor').each(function() {
+            var $el = $(this);
+            var status = $el.attr('data-val');
+            if (status == 1) {
+                var id = $el.attr('id');
+                ids += id + ',';
+            }
+        });
+        $('#get_color_id').val(ids);
+    });
+});
+
+
+        
+    </script>
 @endsection
 
