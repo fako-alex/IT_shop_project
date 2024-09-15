@@ -14,12 +14,25 @@ class ProductFront extends Controller
 {
     public function getCategory($slug, $subslug = '') {
 
+        
+        $getProductSingle = ProductModel::getSingleSlug($slug);
+        
         $getCategory = CategoryModel::getSingleSlug($slug);
         $getSubCategory = SubCategoryModel::getSingleSlug($subslug);
         $data['getColor'] = ColorModel::getRecordActive();
         $data['getBrand'] = BrandModel::getRecordActive();
 
-        if(!empty($getCategory) && !empty($getSubCategory)){
+        if(!empty($getProductSingle)){
+            
+            
+            $data['meta_title']       = $getProductSingle->title;
+            $data['meta_description'] = $getProductSingle->short_description;
+            $data['getProduct']       = $getProductSingle;
+
+            return view('product.detail', $data);
+        }
+
+       else if(!empty($getCategory) && !empty($getSubCategory)){
 
             $data['meta_title'] = $getSubCategory->meta_title;
             $data['meta_description'] = $getSubCategory->meta_description;

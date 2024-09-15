@@ -249,5 +249,13 @@ class ProductModel extends Model
     {
         return ProductImageModel::where('product_id', '=', $product_id)->orderBy('order_by', 'asc')->first();
     }
+
+    
+    static public function getSingleSlug($slug){
+        return self::where('slug', '=', $slug)
+        ->where('product.is_delete', '=', 0)
+        ->where('product.status', '=', 0) 
+        ->first();
+    }
 }
 
