@@ -62,70 +62,23 @@
                         </div>
                     </div>
 
-                    <div class="products mb-3">
-                        <div class="row justify-content-center">
-                            @if($getProduct->isEmpty())
-                                <p>Pas de produits affectés dans cette catégorie</p>
-                            @else
-                                @foreach($getProduct as $value)
-                                    @php
-                                        $getproductImage = $value->getImageSingle($value->id);
-                                    @endphp
-
-                                    <div class="col-6 col-md-4 col-lg-4">
-                                        <div class="product product-7 text-center">
-                                            <figure class="product-media">
-                                                <a href="{{ url($value->slug)}}">
-                                                    @if(!empty($getproductImage) && !empty($getproductImage->getLogo()))
-                                                        <img style="height: 280px; width: 100%; objectif-fit: cover;" src="{{ $getproductImage->getLogo()}}" alt="{{ $value->title}}" class="product-image">
-                                                    @endif
-                                                </a>
- 
-                                                <div class="product-action-vertical">
-                                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                                    {{-- <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a> --}}
-                                                </div>
-
-                                                {{-- <div class="product-action">
-                                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                                </div> --}}
-                                            </figure>
-
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="{{url($value->category_slug.'/'.$value->sub_category_slug)}}">{{ $value->sub_category_name}} </a>
-                                                </div>
-                                                <h3 class="product-title"><a href="{{ url($value->slug)}}">{{ $value->title}} </a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    {{-- {{ number_format($value->price, 2)}} FCFA // le ,2 permet d'ajouter les chiffres après la virgule. --}}
-                                                    {{ number_format($value->price, 2)}} FCFA 
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                                    </div>
-                                                    <span class="ratings-text">( 2 Reviews )</span>
-                                                </div>        
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
-
-                        </div>
+                    <div id="getProductAjax">
+                        @include('product._list');
                     </div>
-
-                    <div class="justify-content-center">
-                        {!! $getProduct->appends(request()->except('page'))->links() !!}
-                    </div>
+                
                 </div>
                 <aside class="col-lg-3 order-lg-first">
                     <form id="FilterForm" method="post" action="">
-                        <input type="text" name="sub_category_id" id="get_sub_category_id">
-                        <input type="text" name="brand_id" id="get_brand_id">
-                        <input type="text" name="color_id" id="get_color_id">
-                        <input type="text" name="sort_by_id" id="get_sort_by_id">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="old_sub_category_id" value="{{ !empty($getSubCategory) ? $getSubCategory->id : ''}}" >
+                        <input type="hidden" name="old_category_id" value="{{ !empty($getCategory) ? $getCategory->id : ''}}">
+
+                        <input type="hidden" name="sub_category_id" id="get_sub_category_id" readonly>
+                        <input type="hidden" name="brand_id" id="get_brand_id" readonly>
+                        <input type="hidden" name="color_id" id="get_color_id" readonly>
+                        <input type="hidden" name="sort_by_id" id="get_sort_by_id" readonly>
+                        <input type="hidden" name="start_price" id="get_start_price" readonly>
+                        <input type="hidden" name="end_price" id="get_end_price" readonly>
 
                     </form>
                     <div class="sidebar sidebar-shop">
@@ -281,13 +234,12 @@
                                     Prix du produit
                                 </a>
                             </h3>
-
                             <div class="collapse show" id="widget-5">
                                 <div class="widget-body">
                                     <div class="filter-price">
                                         <div class="filter-price-text">
-                                            Prix compris entre :
-                                            <span id="filter-price-range"></span>
+                                            Prix compris entre : <br>
+                                            <span id="filter-price-range"> </span>
                                         </div>
                                         <div id="price-slider"></div>
                                     </div>
@@ -306,62 +258,246 @@
     <script src="{{ url('assets/js/wNumb.js')}}"></script>
     <script src="{{ url('assets/js/bootstrap-input-spinner.js')}}"></script>
     <script src="{{ url('assets/js/nouislider.min.js')}}"></script> 
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
 
-$(document).ready(function() {
-    $('.ChangeSortBy').change(function() {
-        var id = $(this).val();
-        $('#get_sort_by_id').val(id); 
-    });
+        $(document).ready(function() {
 
-    $('.ChangeCategory').change(function() {
-        var ids = '';
-        $('.ChangeCategory').each(function() {
-            if (this.checked) {
+            $('.ChangeSortBy').change(function() {
                 var id = $(this).val();
-                ids += id + ',';
-            }
-        });
-        $('#get_sub_category_id').val(ids);
-    });
+                $('#get_sort_by_id').val(id);  
+                FiterForm();
+            });
 
-    $('.ChangeBrand').change(function() {
-        var ids = '';
-        $('.ChangeBrand').each(function() {
-            if (this.checked) {
-                var id = $(this).val();
-                ids += id + ',';
-            }
-        });
-        $('#get_brand_id').val(ids);
-    });
+            $('.ChangeCategory').change(function() {
+                var ids = '';
+                $('.ChangeCategory').each(function() {
+                    if (this.checked) {
+                        var id = $(this).val();
+                        ids += id + ',';
+                    }
+                });
+                $('#get_sub_category_id').val(ids);
+                FiterForm();
+            });
 
-    $('.ChangeColor').click(function() {
-        var $this = $(this);
-        var status = $this.attr('data-val');
-        if (status == 0) {
-            $this.attr('data-val', 1);
-            $this.addClass('active-color');
-        } else {
-            $this.attr('data-val', 0);
-            $this.removeClass('active-color');
+            $('.ChangeBrand').change(function() {
+                var ids = '';
+                $('.ChangeBrand').each(function() {
+                    if (this.checked) {
+                        var id = $(this).val();
+                        ids += id + ',';
+                    }
+                });
+                $('#get_brand_id').val(ids);
+                FiterForm();
+            });
+
+            $('.ChangeColor').click(function() {
+                var $this = $(this);
+                var status = $this.attr('data-val');
+                if (status == 0) {
+                    $this.attr('data-val', 1);
+                    $this.addClass('active-color');
+                } else {
+                    $this.attr('data-val', 0);
+                    $this.removeClass('active-color');
+                }
+
+                var ids = '';
+                $('.ChangeColor').each(function() {
+                    var $el = $(this);
+                    var status = $el.attr('data-val');
+                    if (status == 1) {
+                        var id = $el.attr('id');
+                        ids += id + ',';
+                    }
+                });
+                $('#get_color_id').val(ids);
+                FiterForm();
+            });
+
+            var xhr =;
+            function FiterForm() {
+                if(xhr && xhr.readyState != 4){
+                    xhr.abort();
+                }
+
+               xhr = $.ajax({
+                    type: 'POST',
+                    url: "{{ url('get_filter_product_ajax') }}",
+                    data: $('#FilterForm').serialize(),  // Remplacé le point-virgule par une virgule
+                    dataType: "json",
+                    success: function(data) {
+                        $('#getProductAjax').html(data.success);
+                    },
+
+                    error: function(xhr, status, error) {
+                        // Gérer les erreurs ici
+                        console.error('Erreur AJAX :', status, error);
+                    }
+                });
+            }
+
+            var i = 0;
+
+            if (typeof noUiSlider === 'object') {
+            var priceSlider = document.getElementById('price-slider');
+
+            noUiSlider.create(priceSlider, {
+                start: [0, 1000000000],
+                connect: true,
+                step: 1000,
+                margin: 2000,
+                range: {
+                    'min': 0,
+                    'max': 1000000000
+                },
+                tooltips: true,
+                format: wNumb({
+                    decimals: 0,
+                    prefix: 'FCFA'
+                })
+            });
+
+            priceSlider.noUiSlider.on('update', function(values, handle) {
+                var start_price = values[0];
+                var end_price = values[1];
+                $('#get_start_price').val(start_price);
+                $('#get_end_price').val(end_price);
+                $('#filter-price-range').text(values.join(' - '));
+                
+                if(i == 0 || i == 1){
+                    i++;
+                    
+                }ele{
+
+                    FiterForm();
+                }
+
+            });
         }
 
-        var ids = '';
-        $('.ChangeColor').each(function() {
-            var $el = $(this);
-            var status = $el.attr('data-val');
-            if (status == 1) {
-                var id = $el.attr('id');
-                ids += id + ',';
+        });   
+    </script> --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Fonction pour filtrer les produits
+            function FiterForm() {
+                if(xhr && xhr.readyState != 4){
+                    xhr.abort();
+                }
+    
+                xhr = $.ajax({
+                    type: 'POST',
+                    url: "{{ url('get_filter_product_ajax') }}",
+                    data: $('#FilterForm').serialize(),  // Remplacé le point-virgule par une virgule
+                    dataType: "json",
+                    success: function(data) {
+                        $('#getProductAjax').html(data.success);
+                    },
+                    error: function(xhr, status, error) {
+                        // Gérer les erreurs ici
+                        console.error('Erreur AJAX :', status, error);
+                    }
+                });
+            }
+    
+            // Gestion du changement de tri
+            $('.ChangeSortBy').change(function() {
+                var id = $(this).val();
+                $('#get_sort_by_id').val(id);  
+                FiterForm();
+            });
+    
+            // Gestion du changement de catégorie
+            $('.ChangeCategory').change(function() {
+                var ids = '';
+                $('.ChangeCategory').each(function() {
+                    if (this.checked) {
+                        var id = $(this).val();
+                        ids += id + ',';
+                    }
+                });
+                $('#get_sub_category_id').val(ids);
+                FiterForm();
+            });
+    
+            // Gestion du changement de marque
+            $('.ChangeBrand').change(function() {
+                var ids = '';
+                $('.ChangeBrand').each(function() {
+                    if (this.checked) {
+                        var id = $(this).val();
+                        ids += id + ',';
+                    }
+                });
+                $('#get_brand_id').val(ids);
+                FiterForm();
+            });
+    
+            // Gestion du changement de couleur
+            $('.ChangeColor').click(function() {
+                var $this = $(this);
+                var status = $this.attr('data-val');
+                if (status == 0) {
+                    $this.attr('data-val', 1);
+                    $this.addClass('active-color');
+                } else {
+                    $this.attr('data-val', 0);
+                    $this.removeClass('active-color');
+                }
+    
+                var ids = '';
+                $('.ChangeColor').each(function() {
+                    var $el = $(this);
+                    var status = $el.attr('data-val');
+                    if (status == 1) {
+                        var id = $el.attr('id');
+                        ids += id + ',';
+                    }
+                });
+                $('#get_color_id').val(ids);
+                FiterForm();
+            });
+    
+            var xhr;
+            // Initialisation du slider de prix
+            if (typeof noUiSlider === 'object') {
+                var priceSlider = document.getElementById('price-slider');
+    
+                noUiSlider.create(priceSlider, {
+                    start: [0, 1000000000],
+                    connect: true,
+                    step: 1000,
+                    margin: 2000,
+                    range: {
+                        'min': 0,
+                        'max': 1000000000
+                    },
+                    tooltips: true,
+                    format: wNumb({
+                        decimals: 0,
+                        prefix: 'FCFA'
+                    })
+                });
+    
+                var i = 0;  // Initialisation de l'indice pour contrôler le déclenchement de la fonction
+                priceSlider.noUiSlider.on('update', function(values, handle) {
+                    var start_price = values[0];
+                    var end_price = values[1];
+                    $('#get_start_price').val(start_price);
+                    $('#get_end_price').val(end_price);
+                    $('#filter-price-range').text(values.join(' - '));
+    
+                    if (i == 0 || i == 1) {
+                        i++;
+                    } else {
+                        FiterForm();
+                    }
+                });
             }
         });
-        $('#get_color_id').val(ids);
-    });
-});
-
-
-        
     </script>
+    
 @endsection
 

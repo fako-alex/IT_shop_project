@@ -48,11 +48,22 @@ class ProductFront extends Controller
             $data['meta_keywords'] = $getCategory->meta_keywords;
 
             $data['getProduct'] = ProductModel::getProduct($getCategory->id);
-
+            
             return view('product.list', $data);
         }
         else{
             abort(404);
         }
+    }
+    
+    public function getFilterProductAjax(Request $request){
+        
+        $getProduct = ProductModel::getProduct();
+        return response()->json([
+            "status"=>true,
+            "success"=>view("product._list", [
+                "getProduct"=>$getProduct,
+            ])->render(),
+            ], 200);
     }
 }
