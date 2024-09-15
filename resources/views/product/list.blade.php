@@ -43,7 +43,7 @@
                     <div class="toolbox">
                         <div class="toolbox-left">
                             <div class="toolbox-info">
-                                Showing <span>9 of 56</span> Products
+                                Affichage de <span> {{ $getProduct->perPage()}} sur {{ $getProduct->total()}} </span> Produits
                             </div>
                         </div>
 
@@ -63,7 +63,10 @@
                     </div>
 
                     <div id="getProductAjax">
-                        @include('product._list');
+                        @include('product._list')
+                    </div>
+                    <div style="text-align: center">
+                        <a href="javascript:;" @if(empty($page)) style="display:none;" @endif data-page="{{ $page}}" class="btn btn-primary LoardMore">charger plus</a>
                     </div>
                 
                 </div>
@@ -394,6 +397,12 @@
                     dataType: "json",
                     success: function(data) {
                         $('#getProductAjax').html(data.success);
+                        $('.LoadMore').attr('data-page', data.page);
+                        if(data.page == 0){
+                            $('.LoadMore').hide();
+                        }else{
+                            $('.LoadMore').show();
+                        }
                     },
                     error: function(xhr, status, error) {
                         // Gérer les erreurs ici
@@ -460,7 +469,39 @@
                 FiterForm();
             });
     
-            var xhr;
+            $('body').delegate('.LoadMore', 'click', function(){
+
+                var page = $(this).attr('data-page');
+
+                $('.LoadMore').html('Chargement...');
+
+                if(xhr && xhr.readyState != 4){
+                    xhr.abort();
+                }
+    
+                xhr = $.ajax({
+                    type: 'POST',
+                    url: "{{ url('get_filter_product_ajax') }}?page="+page,
+                    data: $('#FilterForm').serialize(),  // Remplacé le point-virgule par une virgule
+                    dataType: "json",
+                    success: function(data) {
+                        $('#getProductAjax').append(data.success);
+                        $('.LoadMore').attr('data-page', data.page);
+                        $('.LoadMore').html('Voir plus!');
+                        if(data.page == 0){
+                            $('.LoadMore').hide();
+                        }else{
+                            $('.LoadMore').show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Gérer les erreurs ici
+                        console.error('Erreur AJAX :', status, error);
+                    }
+                });
+            });
+
+            var i = 0;
             // Initialisation du slider de prix
             if (typeof noUiSlider === 'object') {
                 var priceSlider = document.getElementById('price-slider');

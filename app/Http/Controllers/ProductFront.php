@@ -28,8 +28,20 @@ class ProductFront extends Controller
             $data['getSubCategory'] = $getSubCategory;
             $data['getCategory'] = $getCategory;
 
-            $data['getProduct'] = ProductModel::getProduct($getCategory->id, $getSubCategory->id);
+            $getProduct= ProductModel::getProduct($getCategory->id, $getSubCategory->id);
             // dd($data['getProduct']);
+
+            $page = 0;
+            if(!empty($getProduct->nextPageUrl())){
+                $parse_url = parse_url($getProduct->nextPageUrl);
+                if(!empty($parse_url['query'])){
+                    parse_str($parse_url['query'], $get_array);
+                    $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+                }
+            }
+            $data['page'] = $page;
+
+            $data['getProduct'] = $getProduct;
 
             $data['getSubCategoryFilter'] = SubCategoryModel::getRecordSubCategory($getCategory->id);
             //dd($data['getSubCategoryFilter']);
@@ -47,8 +59,20 @@ class ProductFront extends Controller
             $data['meta_description'] = $getCategory->meta_description;
             $data['meta_keywords'] = $getCategory->meta_keywords;
 
-            $data['getProduct'] = ProductModel::getProduct($getCategory->id);
-            
+            $getProduct = ProductModel::getProduct($getCategory->id);
+            // dd($getProduct->nextPageUrl());
+            $page = 0;
+            if(!empty($getProduct->nextPageUrl())){
+                $parse_url = parse_url($getProduct->nextPageUrl);
+                if(!empty($parse_url['query'])){
+                    parse_str($parse_url['query'], $get_array);
+                    $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+                }
+            }
+            $data['page'] = $page;
+
+            $data['getProduct'] = $getProduct;
+
             return view('product.list', $data);
         }
         else{
@@ -59,8 +83,20 @@ class ProductFront extends Controller
     public function getFilterProductAjax(Request $request){
         
         $getProduct = ProductModel::getProduct();
+
+        $page = 0;
+        if(!empty($getProduct->nextPageUrl())){
+            $parse_url = parse_url($getProduct->nextPageUrl);
+            if(!empty($parse_url['query'])){
+                parse_str($parse_url['query'], $get_array);
+                $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+            }
+        }
+        $data['page'] = $page;
+
         return response()->json([
             "status"=>true,
+            "page"=>$page,
             "success"=>view("product._list", [
                 "getProduct"=>$getProduct,
             ])->render(),

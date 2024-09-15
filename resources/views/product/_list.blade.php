@@ -52,6 +52,6 @@
     </div>
 </div>
 
-<div class="justify-content-center">
+{{-- <div class="justify-content-center">
     {!! $getProduct->appends(request()->except('page'))->links() !!}
-</div>
+</div> --}}
