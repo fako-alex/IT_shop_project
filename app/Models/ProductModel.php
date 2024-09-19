@@ -257,5 +257,12 @@ class ProductModel extends Model
         ->where('product.status', '=', 0) 
         ->first();
     }
+
+    public function getCategory(){
+        return $this->belongsTo(CategoryModel::class, 'category_id');
+    }
+    public function getSubCategory(){
+        return $this->belongsTo(SubCategoryModel::class, 'sub_category_id');
+    }
 }
 
