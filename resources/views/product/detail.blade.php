@@ -12,23 +12,11 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
         <div class="container d-flex align-items-center">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('') }}">Accueil</a></li>
                 <li class="breadcrumb-item"><a href="{{ url($getProduct->getCategory->slug)}}">{{ $getProduct->getCategory->name}} </a></li>
                 <li class="breadcrumb-item"><a href="{{ url($getProduct->getCategory->slug.'/'.$getProduct->getSubCategory->slug)}}">{{ $getProduct->getSubCategory->name}} </a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $getProduct->title}} </li>
             </ol>
-
-            {{-- <nav class="product-pager ml-auto" aria-label="Product">
-                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                    <i class="icon-angle-left"></i>
-                    <span>Prev</span>
-                </a>
-
-                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                    <span>Next</span>
-                    <i class="icon-angle-right"></i>
-                </a>
-            </nav>< --}}
         </div>
     </nav>
 
@@ -39,30 +27,25 @@
                     <div class="col-md-6">
                         <div class="product-gallery">
                             <figure class="product-main-image">
-                                <img id="product-zoom" src="assets/images/products/single/extended/3.jpg" data-zoom-image="assets/images/products/single/extended/3-big.jpg" alt="product image">
+                                @php
+                                   $getProductImage = $getProduct->getImageSingle($getProduct->id); 
+                                @endphp
 
-                                <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                    <i class="icon-arrows"></i>
-                                </a>
-                            </figure><!-- End .product-main-image -->
+                                @if(!empty($getProductImage) &&!empty($getProductImage->getLogo()))
+                                    <img id="product-zoom" src="{{ $getProductImage->getLogo() }}" data-zoom-image="{{ $getProductImage->getLogo() }}" alt="product image">
+
+                                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                        <i class="icon-arrows"></i>
+                                    </a>
+                                @endif
+                            </figure>
 
                             <div id="product-zoom-gallery" class="product-image-gallery">
-                                <a class="product-gallery-item" href="#" data-image="assets/images/products/single/extended/1.jpg" data-zoom-image="assets/images/products/single/extended/1-big.jpg">
-                                    <img src="assets/images/products/single/extended/1-small.jpg" alt="product side">
-                                </a>
-
-                                <a class="product-gallery-item" href="#" data-image="assets/images/products/single/extended/2.jpg" data-zoom-image="assets/images/products/single/extended/2-big.jpg">
-                                    <img src="assets/images/products/single/extended/2-small.jpg" alt="product cross">
-                                </a>
-
-                                <a class="product-gallery-item active" href="#" data-image="assets/images/products/single/extended/3.jpg" data-zoom-image="assets/images/products/single/extended/3-big.jpg">
-                                    <img src="assets/images/products/single/extended/3-small.jpg" alt="product with model">
-                                </a>
-
-                                <a class="product-gallery-item" href="#" data-image="assets/images/products/single/extended/4.jpg" data-zoom-image="assets/images/products/single/extended/4-big.jpg">
-                                    <img src="assets/images/products/single/extended/4-small.jpg" alt="product back">
-                                </a>
-
+                                @foreach($getProduct->getImage as $image)
+                                    <a class="product-gallery-item" href="#" data-image="{{ $image->getLogo()}} " >
+                                        <img src="{{ $image->getLogo() }}" alt="product side">
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -79,38 +62,40 @@
                             </div>
 
                             <div class="product-price">
-                                ${{ number_format($getProduct->price, 2) }} FCFA
+                                {{ number_format($getProduct->price, 2) }} FCFA
                             </div>
 
                             <div class="product-content">
                                 <p>{{ $getProduct->short_description}} </p>
                             </div>
 
-                            <div class="details-filter-row details-row-size">
-                                <label>Color:</label>
-
-                                <div class="product-nav product-nav-dots">
-                                    <a href="#" class="active" style="background: #eab656;"><span class="sr-only">Color name</span></a>
-                                    <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                                    <a href="#" style="background: #3a588b;"><span class="sr-only">Color name</span></a>
-                                    <a href="#" style="background: #caab97;"><span class="sr-only">Color name</span></a>
+                            @if(!empty($getProduct->getColor->count()))
+                                <div class="details-filter-row details-row-size">
+                                    <label for="color">Couleur :</label>
+                                    <div class="select-custom">
+                                        <select name="color" id="color" class="form-control">
+                                            <option value="#" selected="selected">Selectionez la Couleur</option>
+                                            @foreach($getProduct->getColor as $color)
+                                                <option value="{{ $color->getColor->id }}">{{ $color->getColor->name }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
-                            <div class="details-filter-row details-row-size">
-                                <label for="size">Size:</label>
-                                <div class="select-custom">
-                                    <select name="size" id="size" class="form-control">
-                                        <option value="#" selected="selected">Select a size</option>
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">Extra Large</option>
-                                    </select>
+                            @if(!empty($getProduct->getSize->count()))
+                                <div class="details-filter-row details-row-size">
+                                    <label for="size">Taille :</label>
+                                    <div class="select-custom">
+                                        <select name="size" id="size" class="form-control">
+                                            <option value="#" selected="selected">Selectionez la taille</option>
+                                            @foreach($getProduct->getSize as $size)
+                                                <option value="{{ $size->id }}">{{ $size->name }} @if(!empty( $size->price)) ({{ number_format($size->price, 2)}} FCFA) @endif</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
-                            </div>
+                            @endif
 
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
@@ -264,21 +249,144 @@
         <div class="container">
             <h2 class="title text-center mb-5">You May Also Like</h2>
             
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
-                data-owl-options='{
-                    "nav": false, 
-                    "dots": true,
-                    "margin": 20,
-                    "loop": false,
-                    "responsive": {
-                        "0": { "items": 1 },
-                        "480": { "items": 2 },
-                        "768": { "items": 3 },
-                        "992": { "items": 4 },
-                        "1200": { "items": 4, "nav": true, "dots": false }
-                    }
-                }'>
+            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" data-owl-options='{"nav": false, "dots": true, margin": 20, "loop": false, "responsive": { "0": { "items": 1 }, "480": { "items": 2 }, "768": { "items": 3 }, "992": { "items": 4 }, "1200": { "items": 4, "nav": true, "dots": false }}'>
                 <!-- Ajoutez ici vos éléments de produit -->
+                <!-- Exemple d'élément de produit -->
+                <div class="product product-7">
+                    <figure class="product-media">
+                        <span class="product-label label-new">New</span>
+                        <a href="product.html">
+                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
+                        </a>
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        </div>
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div>
+                    </figure>
+                    <div class="product-body">
+                        <div class="product-cat"><a href="#">Women</a></div>
+                        <h3 class="product-title"><a href="product.html">Brown paperbag waist pencil skirt</a></h3>
+                        <div class="product-price">$60.00</div>
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: 20%;"></div>
+                            </div>
+                            <span class="ratings-text">( 2 Reviews )</span>
+                        </div>
+                        <div class="product-nav product-nav-dots">
+                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Répétez pour chaque produit -->
+                <!-- Exemple d'élément de produit -->
+                <div class="product product-7">
+                    <figure class="product-media">
+                        <span class="product-label label-new">New</span>
+                        <a href="product.html">
+                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
+                        </a>
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        </div>
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div>
+                    </figure>
+                    <div class="product-body">
+                        <div class="product-cat"><a href="#">Women</a></div>
+                        <h3 class="product-title"><a href="product.html">Brown paperbag waist pencil skirt</a></h3>
+                        <div class="product-price">$60.00</div>
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: 20%;"></div>
+                            </div>
+                            <span class="ratings-text">( 2 Reviews )</span>
+                        </div>
+                        <div class="product-nav product-nav-dots">
+                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Répétez pour chaque produit -->
+                <!-- Exemple d'élément de produit -->
+                <div class="product product-7">
+                    <figure class="product-media">
+                        <span class="product-label label-new">New</span>
+                        <a href="product.html">
+                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
+                        </a>
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        </div>
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div>
+                    </figure>
+                    <div class="product-body">
+                        <div class="product-cat"><a href="#">Women</a></div>
+                        <h3 class="product-title"><a href="product.html">Brown paperbag waist pencil skirt</a></h3>
+                        <div class="product-price">$60.00</div>
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: 20%;"></div>
+                            </div>
+                            <span class="ratings-text">( 2 Reviews )</span>
+                        </div>
+                        <div class="product-nav product-nav-dots">
+                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Répétez pour chaque produit -->
+                <!-- Exemple d'élément de produit -->
+                <div class="product product-7">
+                    <figure class="product-media">
+                        <span class="product-label label-new">New</span>
+                        <a href="product.html">
+                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
+                        </a>
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        </div>
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div>
+                    </figure>
+                    <div class="product-body">
+                        <div class="product-cat"><a href="#">Women</a></div>
+                        <h3 class="product-title"><a href="product.html">Brown paperbag waist pencil skirt</a></h3>
+                        <div class="product-price">$60.00</div>
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: 20%;"></div>
+                            </div>
+                            <span class="ratings-text">( 2 Reviews )</span>
+                        </div>
+                        <div class="product-nav product-nav-dots">
+                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
+                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Répétez pour chaque produit -->
                 <!-- Exemple d'élément de produit -->
                 <div class="product product-7">
                     <figure class="product-media">
@@ -455,6 +563,9 @@
 </main>
 @endsection 
 @section('script')
+<script src="{{ url('assets/js/bootstrap-input-spinner.js')}}"></script>
+<script src="{{ url('assets/js/jquery.elevateZoom.min.js')}}"></script>
+<script src="{{ url('assets/js/bootstra-input-spinner.js')}}"></script>
 <script>
     $(document).ready(function(){
         $('.owl-carousel').owlCarousel({
@@ -472,5 +583,6 @@
         });
     });
 </script>
+
 @endsection
 
