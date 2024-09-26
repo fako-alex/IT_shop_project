@@ -236,6 +236,12 @@ class ProductModel extends Model
             $query->whereBetween('product.price', [$start_price, $end_price]);
         }
 
+        // Filtrage par titre
+        if (!empty(Request::get('q'))) {
+            $searchTerm = Request::get('q');
+            $query->where('product.title', 'like', '%' . $searchTerm . '%');
+        }
+
         // Récupération des produits avec suppression et statut
         return $query->where('product.is_delete', '=', 0)
             ->where('product.status', '=', 0)

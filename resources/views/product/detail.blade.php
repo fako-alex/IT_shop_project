@@ -40,10 +40,10 @@
                                 @endif
                             </figure>
 
-                            <div id="product-zoom-gallery" class="product-image-gallery">
+                            <div id="product-zoom-gallery" class="product-image-gallery"  style="border-color: rgb(233, 23, 23)">
                                 @foreach($getProduct->getImage as $image)
-                                    <a class="product-gallery-item" href="#" data-image="{{ $image->getLogo()}} " >
-                                        <img src="{{ $image->getLogo() }}" alt="product side">
+                                    <a class="product-gallery-item" href="#" data-image="{{ $image->getLogo()}} ">
+                                        <img src="{{ $image->getLogo() }}" alt="product side"  style="border-color: rgb(233, 23, 23)">
                                     </a>
                                 @endforeach
                             </div>
