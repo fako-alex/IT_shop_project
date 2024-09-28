@@ -40,7 +40,7 @@
                                 @endif
                             </figure>
 
-                            <div id="product-zoom-gallery" class="product-image-gallery"  style="border-color: rgb(233, 23, 23)">
+                            <div id="product-zoom-gallery" class="product-image-gallery" >
                                 @foreach($getProduct->getImage as $image)
                                     <a class="product-gallery-item" href="#" data-image="{{ $image->getLogo()}} ">
                                         <img src="{{ $image->getLogo() }}" alt="product side"  style="border-color: rgb(233, 23, 23)">
@@ -62,12 +62,29 @@
                             </div>
 
                             <div class="product-price">
-                                {{ number_format($getProduct->price, 2) }} FCFA
+                                <span id="getTotalPrice">{{ number_format($getProduct->price, 2) }} FCFA</span>
                             </div>
 
                             <div class="product-content">
                                 <p>{{ $getProduct->short_description}} </p>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                             @if(!empty($getProduct->getColor->count()))
                                 <div class="details-filter-row details-row-size">
@@ -83,14 +100,33 @@
                                 </div>
                             @endif
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             @if(!empty($getProduct->getSize->count()))
                                 <div class="details-filter-row details-row-size">
                                     <label for="size">Taille :</label>
                                     <div class="select-custom">
-                                        <select name="size" id="size" class="form-control">
-                                            <option value="#" selected="selected">Selectionez la taille</option>
+                                        <select name="size" id="size" class="form-control getSizePrice">
+                                            <option data-price="0" value="#" selected="selected">Selectionez la taille</option>
                                             @foreach($getProduct->getSize as $size)
-                                                <option value="{{ $size->id }}">{{ $size->name }} @if(!empty( $size->price)) ({{ number_format($size->price, 2)}} FCFA) @endif</option>
+                                                <option data-price="{{ !empty($size->price) ? $size->price : 0}} " value="{{ $size->id }}">{{ $size->name }} @if(!empty( $size->price)) ({{ number_format($size->price, 2)}} FCFA) @endif</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -100,7 +136,7 @@
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="1000" step="1" data-decimals="0" required>
                                 </div>
                             </div>
 
@@ -313,19 +349,6 @@
                                 </div>
                                 <span class="ratings-text">( 2 Reviews )</span>
                             </div> 
-        
-                            {{-- <div class="product-nav product-nav-thumbs">
-                                <a href="#" class="active">
-                                    <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                                </a>
-                                <a href="#">
-                                    <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                                </a>
-        
-                                <a href="#">
-                                    <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                                </a>
-                            </div> --}}
                         </div>
                     </div>
                 @endforeach
@@ -359,7 +382,34 @@
             }
         });
         
-    });
+        $('.getSizePrice').change(function(){
+            var product_price = '{{ $getProduct->price }}';
+            var price = $('option:selected', this).attr('data-price');
+            var total = parseFloat(product_price) + parseFloat(price);
+            $('#getTotalPrice').html((total) + '  FCFA');
+                        
+        })
+
+        
+    //     $('.getSizePrice').change(function() {
+    //     // Récupérer le prix du produit initial
+    //     var product_price = parseFloat('{{ $getProduct->price }}') || 0;
+        
+    //     // Récupérer la taille sélectionnée et son prix
+    //     var selectedOption = $('option:selected', this);
+    //     var size_price = parseFloat(selectedOption.attr('data-price')) || 0;
+
+    //     // console.log('Product Price:', product_price);
+    //     // console.log('Selected Size Price:', size_price);
+
+    //     // Si une taille est sélectionnée avec un prix, on prend ce prix, sinon on prend le prix de base du produit
+    //     var total = size_price > 0 ? size_price : product_price;
+
+    //     // Formater le prix total avec 2 décimales et l'afficher
+    //     $('#getTotalPrice').html(total.toFixed(2) + ' FCFA');
+    // });
+
+});
 </script>
 
 @endsection
