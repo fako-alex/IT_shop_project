@@ -75,79 +75,62 @@
 
 
 
+                            <form action="{{ url('product/add-to-cart')}}" method="post">
+                                {{ csrf_field() }}
 
+                                <input type="hidden" name="product_id" value="{{ $getProduct->id}}">
+                                @if(!empty($getProduct->getColor->count()))
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="color">Couleur :</label>
+                                        <div class="select-custom">
+                                            <select name="color_id" id="color_id" required class="form-control">
+                                                <option value="" selected="selected">Selectionez la Couleur</option>
+                                                @foreach($getProduct->getColor as $color)
+                                                    <option value="{{ $color->getColor->id }}">{{ $color->getColor->name }} </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
 
+                                @if(!empty($getProduct->getSize->count()))
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="size">Taille :</label>
+                                        <div class="select-custom">
+                                            <select name="size_id" id="size_id" required class="form-control getSizePrice">
+                                                <option data-price="0" value="" selected="selected">Selectionez la taille</option>
+                                                @foreach($getProduct->getSize as $size)
+                                                    <option data-price="{{ !empty($size->price) ? $size->price : 0}} " value="{{ $size->id }}">{{ $size->name }} @if(!empty( $size->price)) ({{ number_format($size->price, 2)}} FCFA) @endif</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
 
-
-
-
-
-
-
-
-
-                            @if(!empty($getProduct->getColor->count()))
                                 <div class="details-filter-row details-row-size">
-                                    <label for="color">Couleur :</label>
-                                    <div class="select-custom">
-                                        <select name="color" id="color" class="form-control">
-                                            <option value="#" selected="selected">Selectionez la Couleur</option>
-                                            @foreach($getProduct->getColor as $color)
-                                                <option value="{{ $color->getColor->id }}">{{ $color->getColor->name }} </option>
-                                            @endforeach
-                                        </select>
+                                    <label for="qty">Qty:</label>
+                                    <div class="product-details-quantity">
+                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="100" name="qty" step="1" data-decimals="0" required>
                                     </div>
                                 </div>
-                            @endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            @if(!empty($getProduct->getSize->count()))
-                                <div class="details-filter-row details-row-size">
-                                    <label for="size">Taille :</label>
-                                    <div class="select-custom">
-                                        <select name="size" id="size" class="form-control getSizePrice">
-                                            <option data-price="0" value="#" selected="selected">Selectionez la taille</option>
-                                            @foreach($getProduct->getSize as $size)
-                                                <option data-price="{{ !empty($size->price) ? $size->price : 0}} " value="{{ $size->id }}">{{ $size->name }} @if(!empty( $size->price)) ({{ number_format($size->price, 2)}} FCFA) @endif</option>
-                                            @endforeach
-                                        </select>
+                                <div class="product-details-action">
+                                    <button style="background: #fff; color:#c96;" type="submit" class="btn-product btn-cart">
+                                        Ajouter au panier
+                                    </button>
+                                    
+                                    <div class="details-action-wrapper">
+                                        <a href="#" class="btn-product btn-wishlist" title="wishlist"><span>add to wishlist</span></a>
+                                        {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
                                     </div>
                                 </div>
-                            @endif
 
-                            <div class="details-filter-row details-row-size">
-                                <label for="qty">Qty:</label>
-                                <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="1000" step="1" data-decimals="0" required>
-                                </div>
-                            </div>
 
-                            <div class="product-details-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                            </form>
 
-                                <div class="details-action-wrapper">
-                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                    {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
-                                </div>
-                            </div>
+
+
+
 
                             <div class="product-details-footer">
                                 <div class="product-cat">

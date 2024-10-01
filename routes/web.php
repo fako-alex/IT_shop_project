@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -87,6 +88,10 @@ Route::group(['middleware'=>'admin'], function(){
    
 
 Route::get('/', [HomeController::class, 'home']);
+
+Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
+Route::get('cart', [PaymentController::class, 'cart']);
+
 Route::get('search', [ProductFront::class, 'getProductSearch'])->name('search');
 Route::post('get_filter_product_ajax', [ProductFront::class, 'getFilterProductAjax']);
 Route::get('/{category?}/{subcategory?}', [ProductFront::class, 'getCategory']);
