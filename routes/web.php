@@ -89,8 +89,9 @@ Route::group(['middleware'=>'admin'], function(){
 
 Route::get('/', [HomeController::class, 'home']);
 
-Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
 Route::get('cart', [PaymentController::class, 'cart']);
+Route::get('cart/delete/{id}', [PaymentController::class, 'cart_delete']);
+Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
 
 Route::get('search', [ProductFront::class, 'getProductSearch'])->name('search');
 Route::post('get_filter_product_ajax', [ProductFront::class, 'getFilterProductAjax']);

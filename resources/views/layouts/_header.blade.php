@@ -133,7 +133,7 @@
                                             <div class="product-cart-details">
                                                 <h4 class="product-title">
                                                 
-                                                    <a href="{{ url($getCartProduct->slug)}} ">{{ $getCartProduct->title }} s</a>
+                                                    <a href="{{ url($getCartProduct->slug)}} ">{{ $getCartProduct->title }}</a>
                                                 </h4>
 
                                                 <span class="cart-product-info">
@@ -147,7 +147,7 @@
                                                     <img src="{{ $getProductImage->getLogo()}} " alt="product">
                                                 </a>
                                             </figure>
-                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                            <a href="{{ url('cart/delete/'.$header_cart->id)}}" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                         </div>
 
                                     @endif
