@@ -80,16 +80,6 @@
                                         </tbody>
                                     </table><!-- End .table table-wishlist -->
                                     <div class="cart-bottom">
-                                        <div class="cart-discount">
-                                            
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="coupon code">
-                                                <div class="input-group-append">
-                                                    <button type="button" class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
                                         
                                         <button type="submit" class="btn btn-outline-dark-2"><span>METTRE À JOUR LE PANIER</span><i class="icon-refresh"></i></button>
                                     </div>
@@ -104,12 +94,12 @@
                                                 <td>TOTAL :</td>
                                                 <td>{{number_format(Cart::getSubTotal(), 2)}} FCFA</td>
                                             </tr>
-                                            <tr class="summary-shipping">
+                                            {{-- <tr class="summary-shipping">
                                                 <td>Expédition :</td>
                                                 <td>&nbsp;</td>
-                                            </tr>
+                                            </tr> --}}
 
-                                            <tr class="summary-shipping-row">
+                                            {{-- <tr class="summary-shipping-row">
                                                 <td>
                                                     <div class="custom-control custom-radio">
                                                         <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
@@ -137,7 +127,7 @@
                                                     </div>
                                                 </td>
                                                 <td>0.00 FCFA</td>
-                                            </tr>
+                                            </tr> --}}
 
                                             <tr class="summary-total">
                                                 <td>Total:</td>
@@ -146,7 +136,7 @@
                                         </tbody>
                                     </table>
 
-                                    <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PASSER À LA CAISSE</a>
+                                    <a href="{{ url('checkout')}}" class="btn btn-outline-primary-2 btn-order btn-block">PASSER À LA CAISSE</a>
                                 </div>
 
                                 <a href="{{ url('')}} " class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUER SES ACHATS</span><i class="icon-refresh"></i></a>

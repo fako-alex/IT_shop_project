@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -22,6 +23,16 @@ Route::get('admin/logout',[AuthController::class, 'logout_admin']);
 Route::group(['middleware'=>'admin'], function(){
 
     Route::get('admin/dashboard', [DashboardController::class, 'dashboard']);
+
+
+      // POUR LES CODES DE REDUCTIONS
+      Route::get('admin/discount_code/list', [DiscountCodeController::class, 'list']);
+      Route::get('admin/discount_code/add', [DiscountCodeController::class, 'add']);
+      Route::post('admin/discount_code/add', [DiscountCodeController::class, 'insert']);
+      Route::get('admin/discount_code/edit/{id}', [DiscountCodeController::class, 'edit']);
+      Route::post('admin/discount_code/edit/{id}', [DiscountCodeController::class, 'update']);
+      Route::get('admin/discount_code/delete/{id}', [DiscountCodeController::class, 'delete']);
+      // FIN
     
     // POUR LES UTILISATEURS
     Route::get('admin/admin/list', [AdminController::class, 'list']);
@@ -70,7 +81,6 @@ Route::group(['middleware'=>'admin'], function(){
     Route::get('admin/color/edit/{id}', [ColorController::class, 'edit']);
     Route::post('admin/color/edit/{id}', [ColorController::class, 'update']);
     Route::get('admin/color/delete/{id}', [ColorController::class, 'delete']);
-   ;
     // FIN
 
     // POUR LES PRODUITS
@@ -84,6 +94,8 @@ Route::group(['middleware'=>'admin'], function(){
     Route::post('admin/product_image_sortable', [ProductController::class, 'product_image_sortable']);
     // FIN
 
+  
+
 });
    
 
@@ -93,6 +105,8 @@ Route::get('cart', [PaymentController::class, 'cart']);
 Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
 Route::post('update_cart', [PaymentController::class, 'update_cart']);
 Route::get('cart/delete/{id}', [PaymentController::class, 'cart_delete']);
+
+Route::get('checkout', [PaymentController::class, 'checkout']);
 
 Route::get('search', [ProductFront::class, 'getProductSearch'])->name('search');
 Route::post('get_filter_product_ajax', [ProductFront::class, 'getFilterProductAjax']);

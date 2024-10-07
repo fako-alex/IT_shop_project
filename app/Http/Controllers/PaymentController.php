@@ -70,4 +70,13 @@ class PaymentController extends Controller
         return redirect()->back();
     }
 
+    public function checkout(Request $request){
+        // dd(Cart::getContent());
+        $data['meta_title'] = 'checkout';
+        $data['meta_description'] = '';
+        $data['meta_keywords'] = '';
+
+        return view('payment.checkout', $data);
+    }
+
 }

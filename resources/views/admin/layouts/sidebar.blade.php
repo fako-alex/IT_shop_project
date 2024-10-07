@@ -213,6 +213,36 @@
                 </ul>
               </li>
 
+
+              <!-- Gestion des produits-->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-hospital"></i>
+                  <p>
+                    Codes de réduction
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                  <li class="nav-item">
+                    <a href="{{url ('admin/discountcode/list')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Liste des Codes de réduction
+                    </p>
+                    </a>
+                  </li> 
+                  <li class="nav-item">
+                    <a href="{{url('admin/discountcode/add')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Ajout des Codes de réduction
+                    </p>
+                    </a>
+                  </li>                            
+                </ul>
+              </li>
+
             <li class="nav-item">
               <a href="#" class="nav-link @if(Request::segment(2) == 'product') active @endif">
               <i class="nav-icon fas fa-hospital"></i>
