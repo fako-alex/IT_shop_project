@@ -15,7 +15,7 @@
                     <h1>Liste des Codes de réduction</h1>
                 </div>
                 <div class="col-sm-6" style="text-align: right;">
-                    <a href="{{ url('admin/discountcode/add') }}" class="btn btn-primary">Ajouter un nouveau Code de réduction</a>
+                    <a href="{{ url('admin/discount_code/add') }}" class="btn btn-primary">Ajouter un nouveau Code de réduction</a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -54,8 +54,8 @@
                                         <td>{{ date('H:i:s', strtotime($value->created_at)) }}</td>
                                         <td>{{ date('d-m-Y', strtotime($value->expire_date)) }}</td>
                                         <td>
-                                            <a href="{{ url('admin/discountcode/edit/'.$value->id) }}" class="btn btn-primary">Modifier</a>
-                                            <a href="{{ url('admin/discountcode/delete/'.$value->id) }}" class="btn btn-danger">Supprimer</a>
+                                            <a href="{{ url('admin/discount_code/edit/'.$value->id) }}" class="btn btn-primary">Modifier</a>
+                                            <a href="{{ url('admin/discount_code/delete/'.$value->id) }}" class="btn btn-danger">Supprimer</a>
                                         </td>
                                     </tr>
                                     @endforeach

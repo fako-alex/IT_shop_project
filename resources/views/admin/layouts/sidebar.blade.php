@@ -225,7 +225,7 @@
                 </a>
                 <ul class="nav nav-treeview" style="display: none;">
                   <li class="nav-item">
-                    <a href="{{url ('admin/discountcode/list')}}" class="nav-link">
+                    <a href="{{url ('admin/discount_code/list')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
                       Liste des Codes de réduction
@@ -233,7 +233,7 @@
                     </a>
                   </li> 
                   <li class="nav-item">
-                    <a href="{{url('admin/discountcode/add')}}" class="nav-link">
+                    <a href="{{url('admin/discount_code/add')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
                       Ajout des Codes de réduction
