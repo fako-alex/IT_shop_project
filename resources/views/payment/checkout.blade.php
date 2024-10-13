@@ -123,24 +123,46 @@
                                             <td>{{number_format(Cart::getSubTotal(), 2)}} FCFA</td>
                                         </tr><!-- End .summary-subtotal -->
 
+
+
+
+
+                                        {{-- <tr>
+                                            <td colspan="2">
+                                                <div class="cart-discount">
+                                                    <div class="input-group">
+                                                        <input type="text" id="getDiscountCode" class="form-control" placeholder="Code de réduction">
+                                                        <div class="input-group-append">
+                                                            <button id="ApplyDiscount" style="height: 38px;" type="button" class="btn btn-outline-primary-2">
+                                                                <i class="icon-long-arrow-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr> --}}
+                                        
                                         <tr>
                                             <td colspan="2">
                                                 <div class="cart-discount">
-                                            
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" placeholder="coupon code">
+                                                        <input type="text" id="getDiscountCode" class="form-control" placeholder="Code de réduction">
                                                         <div class="input-group-append">
-                                                            <button style="height: 38px;" type="button" class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                                            <button id="ApplyDiscount" style="height: 38px;" type="button" class="btn btn-outline-primary-2">
+                                                                <i class="icon-long-arrow-right"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    
+                                                    <!-- Conteneur pour afficher les messages -->
+                                                    <div id="discount-message" style="margin-top: 10px; color: red;"></div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        
 
                                         <tr>
                                             <td>Rabais:</td>
-                                            <td>0.00 FCFA</td>
+                                            <td><span id="getDiscountAmount">0.00</span> FCFA</td>
                                         </tr><!-- End .summary-subtotal -->
 
                                         <tr>
@@ -149,7 +171,7 @@
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>{{number_format(Cart::getSubTotal(), 2)}} FCFA</td>
+                                            <td> <span id="getPayableTotal">{{number_format(Cart::getSubTotal(), 2)}}</span> FCFA</td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
@@ -216,5 +238,92 @@
     
 @endsection 
 @section('script')
+
+{{-- <script type="text/javascript">
+    $(document).ready(function() {
+        // Assurez-vous que jQuery est chargé et prêt
+        $('body').on('click', '#ApplyDiscount', function() {
+            var discount_code = $('#getDiscountCode').val();
+
+            // Vérifiez que le code de réduction n'est pas vide
+            if (discount_code.trim() === "") {
+                alert("Veuillez entrer un code de réduction.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/apply_discount_code') }}",
+                data: {
+                    discount_code: discount_code,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    // Assurez-vous que data.status est correctement vérifié
+                    if (data.status === true) {
+                        // Mettre à jour l'affichage avec le nouveau total
+                        alert(data.message);
+                    } else {
+                        // Afficher le message d'erreur renvoyé par le backend
+                        alert(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Gérer l'erreur lors de la requête
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue lors de l\'application du code de réduction.');
+                }
+            });
+        });
+    });
+</script> --}}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Assurez-vous que jQuery est chargé et prêt
+        $('body').on('click', '#ApplyDiscount', function() {
+            var discount_code = $('#getDiscountCode').val();
+
+            // Vérifiez que le code de réduction n'est pas vide
+            if (discount_code.trim() === "") {
+                $('#discount-message').text("Veuillez entrer un code de réduction.");
+                return;
+            }
+
+            // Afficher un message de validation en cours
+            $('#discount-message').css('color', 'orange').text("Code de réduction en cours de validation...");
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/apply_discount_code') }}",
+                data: {
+                    discount_code: discount_code,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function(data) {
+
+                    $('#getDiscountAmount').html(data.discount_amount);
+                    $('#getPayableTotal').html(data.payable_total);
+
+                    if (data.status === true) {
+                        // Mettre à jour l'affichage avec le nouveau total et message de succès
+                        $('#discount-message').css('color', 'green').text(data.message);
+                        $('.summary-total td:last-child').text(data.new_total);
+                    } else {
+                        $('#discount-message').css('color', 'red').text(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Gérer l'erreur lors de la requête
+                    // console.error('Error:', error);
+                    // $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
+                }
+            });
+        });
+    });
+</script>
+
+
+
 @endsection
 

@@ -6,11 +6,47 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProductModel;
 use App\Models\ProductSizeModel;
+use App\Models\DiscountCodeModel;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 
 class PaymentController extends Controller
 {
+    public function apply_discount_code(Request $request){
+        $request->validate([
+            'discount_code' => 'required|string'
+        ]);
+    
+        // Vérifier le code de réduction
+        $getDiscount = DiscountCodeModel::checkDiscount($request->discount_code);
+        
+        if(!empty($getDiscount)){
+
+            $total = Cart::getSubTotal();
+            if($getDiscount->type == 'Amount'){
+                $discount_amount = $getDiscount->percent_amount;
+                $payable_total = $total - $getDiscount->percent_amount;
+            }
+            else{
+                $discount_amount = ($total * $getDiscount->percent_amount) / 100;
+                $payable_total = $total - $discount_amount;
+            }
+
+            $json['status'] = true;
+            $json['discount_amount'] = number_format($discount_amount, 2);
+            $json['payable_total'] = number_format($payable_total, 2);
+            $json['message'] = 'Le code de réduction est valide';
+            
+        }
+        else{
+            $json['status'] = false;
+            $json['discount_amount'] = '0.00';
+            $json['payable_total'] = number_format(Cart::getSubTotal(), 2);
+            $json['message'] = 'Le code de réduction est invalide';
+        }
+    
+        return response()->json($json);
+    }
     public function add_to_cart(Request $request) {
 
         $getProduct = ProductModel::getSingle($request->product_id);

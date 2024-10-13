@@ -23,4 +23,13 @@ class DiscountCodeModel extends Model
     {
         return self::find($id);
     } 
+
+    static public function CheckDiscount($code){
+        return self::select('discount_code.*')
+            ->where('discount_code.is_delete', '=', 0)
+            ->where('discount_code.status', '=', 0)
+            ->where('discount_code.expire_date', '>=', date('Y-m-d'))
+            ->where('discount_code.name', '=', $code)
+            ->first();
+    }
 }

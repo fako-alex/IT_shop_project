@@ -16,13 +16,13 @@ class DiscountCodeController extends Controller
         $data['header_title'] = 'Code de réduction';
         
         // Passer la variable $data à la vue
-        return view('admin.discountcode.list', $data);
+        return view('admin.discount_code.list', $data);
     }
 
     public function add()
     {
         $data['header_title'] = 'Ajouter un code de réduction';
-        return view('admin.discountcode.add', $data);
+        return view('admin.discount_code.add', $data);
     }
 
     public function insert(Request $request)
@@ -41,14 +41,14 @@ class DiscountCodeController extends Controller
         $DiscountCode->status = trim($request->status);
         $DiscountCode->save();
     
-        return redirect('admin/discountcode/list')->with('success', 'Le code de réduction a été ajoutée avec succès');
+        return redirect('admin/discount_code/list')->with('success', 'Le code de réduction a été ajoutée avec succès');
     }
 
     public function edit($id)
     {
         $data['getRecord'] = DiscountCodeModel::getSingle($id);
         $data['header_title'] = 'Modifier le code de réduction';
-        return view('admin.discountcode.edit', $data);
+        return view('admin.discount_code.edit', $data);
     }
 
     public function update($id, Request $request)
@@ -67,7 +67,7 @@ class DiscountCodeController extends Controller
         $DiscountCode->status = trim($request->status);
         $DiscountCode->save();
     
-        return redirect('admin/discountcode/list')->with('success', 'Le code de réduction a été modifié avec succès');
+        return redirect('admin/discount_code/list')->with('success', 'Le code de réduction a été modifié avec succès');
     }
 
     public function delete($id)
