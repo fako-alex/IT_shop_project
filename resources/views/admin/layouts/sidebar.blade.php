@@ -214,7 +214,7 @@
               </li>
 
 
-              <!-- Gestion des produits-->
+              <!-- Gestion des codes de réduction-->
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-hospital"></i>
@@ -237,6 +237,35 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>
                       Ajout des Codes de réduction
+                    </p>
+                    </a>
+                  </li>                            
+                </ul>
+              </li>
+
+              <!-- Gestion des codes des Frais d'expédition-->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-hospital"></i>
+                  <p>
+                    Frais d'expédition
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                  <li class="nav-item">
+                    <a href="{{url ('admin/shipping_charge/list')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Liste des Codes des Frais d'expédition
+                    </p>
+                    </a>
+                  </li> 
+                  <li class="nav-item">
+                    <a href="{{url('admin/shipping_charge/add')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Ajout des Frais d'expédition
                     </p>
                     </a>
                   </li>                            
