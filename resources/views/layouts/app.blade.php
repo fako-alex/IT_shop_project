@@ -16,6 +16,8 @@
         <meta name="keywords" content="{{ $meta_keywords }}">
     @endif
 
+    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Protection CSRF -->
+    
     <link rel="shortcut icon" href="{{ url('assets/images/icons/favicon.ico')}}">
     <link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ url('assets/css/plugins/owl-carousel/owl.carousel.css')}}">
@@ -26,14 +28,11 @@
 
 <body>
     <div class="page-wrapper">
-        
-    @include('layouts._header')
+        @include('layouts._header')
 
-    @yield('content')
+        @yield('content')
 
-    @include('layouts._footer')
-
-
+        @include('layouts._footer')
     </div>
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -41,7 +40,6 @@
     <div class="mobile-menu-overlay"></div>
 
     @include('layouts._mobile_menu')
-    
 
     <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -61,17 +59,19 @@
                                     <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">S'inscrire</a>
                                 </li>
                             </ul>
+
+                            {{-- Connexion utilisateur --}}
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                     <form action="#">
                                         <div class="form-group">
                                             <label for="singin-email">Nom d'utilisateur ou adresse e-mail *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <input type="text" class="form-control" id="singin-email" name="email" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="singin-password">Mot de passe *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <input type="password" class="form-control" id="singin-password" name="password" required>
                                         </div>
 
                                         <div class="form-footer">
@@ -87,33 +87,31 @@
                                             <a href="#" class="forgot-link">Mot de passe oublié?</a>
                                         </div>
                                     </form>
-                            
                                 </div>
+
+                                {{-- Créer un compte utilisateur --}}
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
+                                    <form action="" id="SubmitFormRegister" method="post">
+                                        {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="register-email">Votre adresse e-mail *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                            <label for="register-name">Votre Nom :<span style="color: red">*</span></label>
+                                            <input type="text" class="form-control" id="register-name" name="name" required>
                                         </div>
-
                                         <div class="form-group">
-                                            <label for="register-password">Mot de passe *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                            <label for="register-email">Votre adresse e-mail<span style="color: red">*</span></label>
+                                            <input type="email" class="form-control" id="register-email" name="email" required>
                                         </div>
-
+                                        <div class="form-group">
+                                            <label for="register-password">Mot de passe<span style="color: red">*</span></label>
+                                            <input type="password" class="form-control" id="register-password" name="password" required>
+                                        </div>
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
                                                 <span>S'INSCRIRE</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
-
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy" required>
-                                                <label class="custom-control-label" for="register-policy">J'accepte la <a href="#">politique de confidentialité</a> *</label>
-                                            </div>
                                         </div>
                                     </form>
-                                
                                 </div>
                             </div>
                         </div>
@@ -122,39 +120,8 @@
             </div>
         </div>
     </div>
-    
 
-    {{-- <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <div class="row no-gutters bg-white newsletter-popup-content">
-                    <div class="col-xl-3-5col col-lg-7 banner-content-wrap">
-                        <div class="banner-content text-center">
-                            <img src="assets/images/popup/newsletter/logo.png" class="logo" alt="logo" width="60" height="15">
-                            <h2 class="banner-title">Obtenez <span>25<light>%</light></span> De réduction</h2>
-                            <p>Abonnez-vous à la newsletter pour recevoir des mises à jour en temps opportun de vos produits préférés.</p>
-                            <form action="#">
-                                <div class="input-group input-group-round">
-                                    <input type="email" class="form-control form-control-white" placeholder="Votre adresse e-mail" aria-label="Email Adress" required>
-                                    <div class="input-group-append">
-                                        <button class="btn" type="submit"><span>go</span></button>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
-                                <label class="custom-control-label" for="register-policy-2">Ne plus afficher cette popup</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2-5col col-lg-5 ">
-                        <img src="{{ url('assets/images/popup/newsletter/img-1.jpg')}}" class="newsletter-img" alt="newsletter">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!--ajout d'email pour recevoir la newsLater -->
+
     <script src="{{ url('assets/js/jquery.min.js')}}"></script>
     <script src="{{ url('assets/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ url('assets/js/jquery.hoverIntent.min.js')}}"></script>
@@ -162,11 +129,46 @@
     <script src="{{ url('assets/js/superfish.min.js')}}"></script>
     <script src="{{ url('assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{ url('assets/js/jquery.magnific-popup.min.js')}}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('body').on('submit', '#SubmitFormRegister', function(e) {
+                e.preventDefault(); 
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('auth_register') }}",  
+                    data: $(this).serialize(),  
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Ajoute le token CSRF
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        alert(data.message);
+                        // Vérifiez si la réponse indique le succès
+                        if (data.message === 'Utilisateur créé avec succès!') {
+                            location.reload(); // Recharger la page si l'utilisateur est créé avec succès
+                        }
+                    },
+                    error: function(response) {
+                        // Afficher le message d'erreur retourné par le serveur
+                        if (response.status === 400) {
+                            // Afficher l'erreur spécifique lorsque l'email existe déjà
+                            alert(response.responseJSON.message);
+                        } else {
+                            // Gérer d'autres types d'erreurs si nécessaire
+                            alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
     
+    
+    
+
     @yield('script')
-    <!-- Main JS File -->
     <script src="{{ url('assets/js/main.js')}}"></script>
 </body>
 
 </html>
-      

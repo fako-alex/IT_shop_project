@@ -140,10 +140,6 @@
                                             <td><span id="getDiscountAmount">0.00</span> FCFA</td>
                                         </tr>
 
-
-
-
-
                                         <tr class="summary-shipping">
                                             <td>Expédition :</td>
                                             <td>&nbsp;</td>
@@ -164,11 +160,6 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-
-
-
-
-
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
@@ -243,63 +234,6 @@
 @endsection 
 @section('script')
 
-{{-- <script type="text/javascript">
-    $(document).ready(function() {
-
-        $('body').on('change', '.getShippingCharge', function() {
-            var price = $(this).attr('data-price');
-            var total = $('#PayableTotal').val();
-            $('#getShippingChargeTotal').val(price);
-            var final_total = parseFloat(price) + parseFloat(total);
-            $('#getPayableTotal').html(final_total.toFixed(2));
-        }); 
-
-        $('body').on('click', '#ApplyDiscount', function() {
-            var discount_code = $('#getDiscountCode').val();
-
-            // Vérifiez que le code de réduction n'est pas vide
-            if (discount_code.trim() === "") {
-                $('#discount-message').text("Veuillez entrer un code de réduction.");
-                return;
-            }
-
-            // Afficher un message de validation en cours
-            $('#discount-message').css('color', 'orange').text("Code de réduction en cours de validation...");
-
-            $.ajax({
-                type: "POST",
-                url: "{{ url('checkout/apply_discount_code') }}",
-                data: {
-                    discount_code: discount_code,
-                    "_token": "{{ csrf_token() }}",
-                },
-                success: function(data) {
-
-                    $('#getDiscountAmount').html(data.discount_amount);
-                    var shipping = $('#getShippingChargeTotal').val();
-                    var final_total = parseFloat(shipping) + parseFloat(data.payable_total);
-
-                    $('#getPayableTotal').html(data.final_total.toFixed(2));
-                    $('#PayableTotal').val(data.payable_total);
-                    //.toFixed(2) // pour mettre 2 chiffres apres la virgule mais n'est pas obligatoire.
-
-                    if (data.status === true) {
-                        // Mettre à jour l'affichage avec le nouveau total et message de succès
-                        $('#discount-message').css('color', 'green').text(data.message);
-                        $('.summary-total td:last-child').text(data.new_total);
-                    } else {
-                        $('#discount-message').css('color', 'red').text(data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Gérer l'erreur lors de la requête
-                    // console.error('Error:', error);
-                    // $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
-                }
-            });
-        });
-    });
-</script> --}}
 <script type="text/javascript">
     $(document).ready(function() {
         // Gestion de la sélection du frais d'expédition
@@ -355,7 +289,7 @@
                 },
                 error: function(xhr, status, error) {
                     // Gérer l'erreur lors de la requête
-                    $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
+                    // $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
                 }
             });
         });

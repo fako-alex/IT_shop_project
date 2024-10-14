@@ -107,6 +107,7 @@ Route::group(['middleware'=>'admin'], function(){
    
 
 Route::get('/', [HomeController::class, 'home']);
+Route::post('auth_register', [AuthController::class, 'auth_register']);
 
 Route::get('cart', [PaymentController::class, 'cart']);
 Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
