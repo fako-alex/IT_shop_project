@@ -8,8 +8,8 @@
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
             <h1 class="page-title">Checkout<span>Shop</span></h1>
-        </div><!-- End .container -->
-    </div><!-- End .page-header -->
+        </div>
+    </div>
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
@@ -17,18 +17,13 @@
                 <li class="breadcrumb-item"><a href="#">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
-        </div><!-- End .container -->
-    </nav><!-- End .breadcrumb-nav -->
+        </div>
+    </nav>
 
     <div class="page-content">
         <div class="checkout">
             <div class="container">
-                {{-- <div class="checkout-discount">
-                    <form action="#">
-                        <input type="text" class="form-control" required id="checkout-discount-input">
-                        <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-                    </form>
-                </div><!-- End .checkout-discount --> --}}
+                
                 <form action="#">
                     <div class="row">
                         <div class="col-lg-9">
@@ -121,26 +116,7 @@
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
                                             <td>{{number_format(Cart::getSubTotal(), 2)}} FCFA</td>
-                                        </tr><!-- End .summary-subtotal -->
-
-
-
-
-
-                                        {{-- <tr>
-                                            <td colspan="2">
-                                                <div class="cart-discount">
-                                                    <div class="input-group">
-                                                        <input type="text" id="getDiscountCode" class="form-control" placeholder="Code de réduction">
-                                                        <div class="input-group-append">
-                                                            <button id="ApplyDiscount" style="height: 38px;" type="button" class="btn btn-outline-primary-2">
-                                                                <i class="icon-long-arrow-right"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> --}}
+                                        </tr>
                                         
                                         <tr>
                                             <td colspan="2">
@@ -157,24 +133,52 @@
                                                     <div id="discount-message" style="margin-top: 10px; color: red;"></div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        
+                                        </tr> 
 
                                         <tr>
                                             <td>Rabais:</td>
                                             <td><span id="getDiscountAmount">0.00</span> FCFA</td>
-                                        </tr><!-- End .summary-subtotal -->
-
-                                        <tr>
-                                            <td>Expédition :</td>
-                                            <td>Livraison gratuite</td>
                                         </tr>
+
+
+
+
+
+                                        <tr class="summary-shipping">
+                                            <td>Expédition :</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+
+                                        @foreach($getShipping as $shipping)
+                                            <tr class="summary-shipping-row">
+                                                <td>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" id="free-shipping {{ $shipping->id}}" name="shipping" data-price="{{ !empty($shipping->price) ? $shipping->price : 0}}" class="custom-control-input getShippingCharge">
+                                                        <label class="custom-control-label" for="free-shipping {{ $shipping->id}}">{{ $shipping->name}}</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if(!empty($shipping->price))
+                                                        {{ number_format($shipping->price,2)}}FCFA
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+
+
+
+
+
                                         <tr class="summary-total">
                                             <td>Total:</td>
                                             <td> <span id="getPayableTotal">{{number_format(Cart::getSubTotal(), 2)}}</span> FCFA</td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
+
+                                <input type="hidden" id="getShippingChargeTotal" value="0">
+                                <input type="hidden" id="PayableTotal" value="{{Cart::getSubTotal()}}">
 
                                 <div class="accordion-summary" id="accordion-payment">
 
@@ -215,25 +219,25 @@
                                                     <img src="assets/images/payments-summary.png" alt="payments cards">
                                                 </a>
                                             </h2>
-                                        </div><!-- End .card-header -->
+                                        </div>
                                         <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
                                             <div class="card-body"> Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-                                            </div><!-- End .card-body -->
-                                        </div><!-- End .collapse -->
-                                    </div><!-- End .card -->
-                                </div><!-- End .accordion -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                     <span class="btn-text">Place Order</span>
                                     <span class="btn-hover-text">Proceed to Checkout</span>
                                 </button>
-                            </div><!-- End .summary -->
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
+                            </div>
+                        </aside>
+                    </div>
                 </form>
-            </div><!-- End .container -->
-        </div><!-- End .checkout -->
-    </div><!-- End .page-content -->
+            </div>
+        </div>
+    </div>
 </main>
     
 @endsection 
@@ -241,46 +245,15 @@
 
 {{-- <script type="text/javascript">
     $(document).ready(function() {
-        // Assurez-vous que jQuery est chargé et prêt
-        $('body').on('click', '#ApplyDiscount', function() {
-            var discount_code = $('#getDiscountCode').val();
 
-            // Vérifiez que le code de réduction n'est pas vide
-            if (discount_code.trim() === "") {
-                alert("Veuillez entrer un code de réduction.");
-                return;
-            }
+        $('body').on('change', '.getShippingCharge', function() {
+            var price = $(this).attr('data-price');
+            var total = $('#PayableTotal').val();
+            $('#getShippingChargeTotal').val(price);
+            var final_total = parseFloat(price) + parseFloat(total);
+            $('#getPayableTotal').html(final_total.toFixed(2));
+        }); 
 
-            $.ajax({
-                type: "POST",
-                url: "{{ url('checkout/apply_discount_code') }}",
-                data: {
-                    discount_code: discount_code,
-                    "_token": "{{ csrf_token() }}",
-                },
-                success: function(data) {
-                    // Assurez-vous que data.status est correctement vérifié
-                    if (data.status === true) {
-                        // Mettre à jour l'affichage avec le nouveau total
-                        alert(data.message);
-                    } else {
-                        // Afficher le message d'erreur renvoyé par le backend
-                        alert(data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Gérer l'erreur lors de la requête
-                    console.error('Error:', error);
-                    alert('Une erreur est survenue lors de l\'application du code de réduction.');
-                }
-            });
-        });
-    });
-</script> --}}
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Assurez-vous que jQuery est chargé et prêt
         $('body').on('click', '#ApplyDiscount', function() {
             var discount_code = $('#getDiscountCode').val();
 
@@ -303,7 +276,12 @@
                 success: function(data) {
 
                     $('#getDiscountAmount').html(data.discount_amount);
-                    $('#getPayableTotal').html(data.payable_total);
+                    var shipping = $('#getShippingChargeTotal').val();
+                    var final_total = parseFloat(shipping) + parseFloat(data.payable_total);
+
+                    $('#getPayableTotal').html(data.final_total.toFixed(2));
+                    $('#PayableTotal').val(data.payable_total);
+                    //.toFixed(2) // pour mettre 2 chiffres apres la virgule mais n'est pas obligatoire.
 
                     if (data.status === true) {
                         // Mettre à jour l'affichage avec le nouveau total et message de succès
@@ -317,6 +295,67 @@
                     // Gérer l'erreur lors de la requête
                     // console.error('Error:', error);
                     // $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
+                }
+            });
+        });
+    });
+</script> --}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Gestion de la sélection du frais d'expédition
+        $('body').on('change', '.getShippingCharge', function() {
+            var price = parseFloat($(this).attr('data-price')) || 0; // Récupère le prix ou 0 s'il est vide
+            var total = parseFloat($('#PayableTotal').val()) || 0; // Récupère le total ou 0 s'il est vide
+            
+            // Met à jour les champs cachés
+            $('#getShippingChargeTotal').val(price);
+            
+            // Calcul du total payable (prix expédition + total actuel)
+            var final_total = price + total;
+            $('#getPayableTotal').html(final_total.toFixed(2)); // Met à jour l'affichage du total
+        });
+
+        // Gestion de l'application du code de réduction
+        $('body').on('click', '#ApplyDiscount', function() {
+            var discount_code = $('#getDiscountCode').val().trim();
+
+            // Vérification que le code de réduction n'est pas vide
+            if (discount_code === "") {
+                $('#discount-message').text("Veuillez entrer un code de réduction.").css('color', 'red');
+                return;
+            }
+
+            // Afficher un message de validation en cours
+            $('#discount-message').css('color', 'orange').text("Code de réduction en cours de validation...");
+
+            // Requête Ajax pour appliquer le code de réduction
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/apply_discount_code') }}",
+                data: {
+                    discount_code: discount_code,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    if (data.status === true) {
+                        // Si la réduction est appliquée avec succès
+                        $('#discount-message').css('color', 'green').text(data.message);
+                        $('#getDiscountAmount').html(data.discount_amount);
+                        
+                        // Recalculer le total payable
+                        var shipping = parseFloat($('#getShippingChargeTotal').val()) || 0;
+                        var final_total = parseFloat(data.payable_total) + shipping;
+                        
+                        $('#getPayableTotal').html(final_total.toFixed(2));
+                        $('#PayableTotal').val(data.payable_total.toFixed(2));
+                    } else {
+                        // Si le code de réduction est invalide
+                        $('#discount-message').css('color', 'red').text(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Gérer l'erreur lors de la requête
+                    $('#discount-message').css('color', 'red').text('Une erreur est survenue lors de l\'application du code de réduction.');
                 }
             });
         });

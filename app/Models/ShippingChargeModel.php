@@ -17,10 +17,19 @@ class ShippingChargeModel extends Model
         ->orderBy('shipping_charge.id', 'desc')
         ->paginate(20);
     }
-
+    
     static public function getSingle($id)
     {
         return self::find($id);
     } 
+
+    static public function getRecordActive()
+    {
+        return self::select('shipping_charge.*')
+        ->where('shipping_charge.is_delete', '=', 0)
+        ->where('shipping_charge.status', '=', 0)
+        ->orderBy('shipping_charge.id', 'asc')
+        ->get();
+    }
 
 }
