@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;  // Correction : import correct de Hash
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegisterMail;
 
 class AuthController extends Controller
 {
@@ -68,20 +70,28 @@ class AuthController extends Controller
     
         if ($existingUser) {
             // Si l'email existe déjà, renvoyer une réponse d'erreur
-            return response()->json(['message' => 'Cette adresse email est déjà utilisée.'], 400);
+            return response()->json(['message' => 'Ce compte est déjà utilisée.'], 400);
         }
     
         // Créer un nouvel utilisateur
         $save = new User();
         $save->name = trim($request->input('name'));
         $save->email = trim($request->input('email'));
-        $save->password = Hash::make($request->input('password')); // Utiliser Hash pour hacher le mot de passe
+        $save->password = Hash::make($request->input('password'));
         $save->save();
+
+        Mail::to($save->email)->send(new RegisterMail($save));
     
-        // Réponse de succès
-        return response()->json(['message' => 'Utilisateur créé avec succès!'], 201);
+        return response()->json(['message' => 'Compte créé avec succès! Consulter votre boite mail pour confirmer votre identité.'], 201);
     }
     
+    public function active_email($id){
+        $id = base64_decode($id);
+        $user = User::getSingle($id);
+        $user->email_verified_at = date('Y-m-d H:i:s');
+        $user->save();
+        return redirect(url(''))->with('success', "Compte vérifier avec succès.");
+    }
 
     
 }
