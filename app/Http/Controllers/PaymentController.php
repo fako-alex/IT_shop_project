@@ -117,4 +117,8 @@ class PaymentController extends Controller
         return view('payment.checkout', $data);
     }
 
+    public function place_order(Request $request){
+        dd($request->all());
+    }
+
 }

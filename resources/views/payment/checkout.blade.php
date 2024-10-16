@@ -7,15 +7,15 @@
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
-            <h1 class="page-title">Checkout<span>Shop</span></h1>
+            <h1 class="page-title">Commander<span>Boutique</span></h1>
         </div>
     </div>
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="#">Boutique</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Vérifier</li>
             </ol>
         </div>
     </nav>
@@ -24,72 +24,70 @@
         <div class="checkout">
             <div class="container">
                 
-                <form action="#">
+                <form action="{{ url('checkout/place_order')}}" method="post">
+                    {{csrf_field()}}
                     <div class="row">
                         <div class="col-lg-9">
-                            <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>First Name *</label>
-                                        <input type="text" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-
-                                    <div class="col-sm-6">
-                                        <label>Last Name *</label>
-                                        <input type="text" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-                                </div><!-- End .row -->
-
-                                <label>Company Name (Optional)</label>
-                                <input type="text" class="form-control">
-
-                                <label>Country *</label>
-                                <input type="text" class="form-control" required>
-
-                                <label>Street address *</label>
-                                <input type="text" class="form-control" placeholder="House number and Street name" required>
-                                <input type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." required>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>Town / City *</label>
-                                        <input type="text" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-
-                                    <div class="col-sm-6">
-                                        <label>State / County *</label>
-                                        <input type="text" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-                                </div><!-- End .row -->
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>Postcode / ZIP *</label>
-                                        <input type="text" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-
-                                    <div class="col-sm-6">
-                                        <label>Phone *</label>
-                                        <input type="tel" class="form-control" required>
-                                    </div><!-- End .col-sm-6 -->
-                                </div><!-- End .row -->
-
-                                <label>Email address *</label>
-                                <input type="email" class="form-control" required>
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="checkout-create-acc">
-                                    <label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
-                                </div><!-- End .custom-checkbox -->
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="checkout-diff-address">
-                                    <label class="custom-control-label" for="checkout-diff-address">Ship to a different address?</label>
-                                </div><!-- End .custom-checkbox -->
-
-                                <label>Order notes (optional)</label>
-                                <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                            <h2 class="checkout-title">Détails de facturation</h2><!-- End .checkout-title -->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Prénom <span style="color: red">*</span></label>
+                                    <input type="text" name="first_name" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                        
+                                <div class="col-sm-6">
+                                    <label>Nom de famille <span style="color: red">*</span></label>
+                                    <input type="text" name="last_name" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+                        
+                            <label>Nom de l'entreprise (facultatif)</label>
+                            <input type="text" name="company_name" class="form-control">
+                        
+                            <label>Pays <span style="color: red">*</span></label>
+                            <input type="text" name="county" class="form-control" required>
+                        
+                            <label>Adresse 1<span style="color: red">*</span></label>
+                            <input type="text" name="address_one" class="form-control" required>
+                            <label>Adresse 2</label>
+                            <input type="text" name="address_two" class="form-control">
+                        
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Ville <span style="color: red">*</span></label>
+                                    <input type="text" name="city" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                        
+                                <div class="col-sm-6">
+                                    <label>Province <span style="color: red">*</span></label>
+                                    <input type="text" name="state" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+                        
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Code postal <span style="color: red">*</span></label>
+                                    <input type="text" name="postcode" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                        
+                                <div class="col-sm-6">
+                                    <label>Téléphone <span style="color: red">*</span></label>
+                                    <input type="tel" name="phone" class="form-control" required>
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+                        
+                            <label>Adresse e-mail <span style="color: red">*</span></label>
+                            <input type="email" name="email" class="form-control" required>
+                        
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="checkout-create-acc">
+                                <label class="custom-control-label" for="checkout-create-acc">Créer un compte ?</label>
+                            </div><!-- End .custom-checkbox -->
+                        
+                            <label>Notes de commande (facultatif)</label>
+                            <textarea class="form-control" name="notes" cols="30" rows="4" placeholder="Notes concernant votre commande, par exemple, des instructions spéciales pour la livraison"></textarea>
                         </div><!-- End .col-lg-9 -->
+                        
                         <aside class="col-lg-3">
                             <div class="summary">
                                 <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
@@ -122,7 +120,7 @@
                                             <td colspan="2">
                                                 <div class="cart-discount">
                                                     <div class="input-group">
-                                                        <input type="text" id="getDiscountCode" class="form-control" placeholder="Code de réduction">
+                                                        <input type="text" name="discount_code" id="getDiscountCode" class="form-control" placeholder="Code de réduction">
                                                         <div class="input-group-append">
                                                             <button id="ApplyDiscount" style="height: 38px;" type="button" class="btn btn-outline-primary-2">
                                                                 <i class="icon-long-arrow-right"></i>
@@ -149,7 +147,7 @@
                                             <tr class="summary-shipping-row">
                                                 <td>
                                                     <div class="custom-control custom-radio">
-                                                        <input type="radio" id="free-shipping {{ $shipping->id}}" name="shipping" data-price="{{ !empty($shipping->price) ? $shipping->price : 0}}" class="custom-control-input getShippingCharge">
+                                                        <input type="radio" value="{{ $shipping->id}}" id="free-shipping {{ $shipping->id}}" name="shipping" data-price="{{ !empty($shipping->price) ? $shipping->price : 0}}" class="custom-control-input getShippingCharge">
                                                         <label class="custom-control-label" for="free-shipping {{ $shipping->id}}">{{ $shipping->name}}</label>
                                                     </div>
                                                 </td>
@@ -173,55 +171,29 @@
 
                                 <div class="accordion-summary" id="accordion-payment">
 
-                                    <div class="card">
-                                        <div class="card-header" id="heading-3">
-                                            <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                                                    Paiement à la livraison
-                                                </a>
-                                            </h2>
-                                        </div><!-- End .card-header -->
-                                        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-                                            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-                                            </div><!-- End .card-body -->
-                                        </div><!-- End .collapse -->
-                                    </div><!-- End .card -->
-
-                                    <div class="card">
-                                        <div class="card-header" id="heading-4">
-                                            <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                                                    PayPal <small class="float-right paypal-link">What is PayPal?</small>
-                                                </a>
-                                            </h2>
-                                        </div><!-- End .card-header -->
-                                        <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
-                                            <div class="card-body">
-                                                Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
-                                            </div><!-- End .card-body -->
-                                        </div><!-- End .collapse -->
-                                    </div><!-- End .card -->
-
-                                    <div class="card">
-                                        <div class="card-header" id="heading-5">
-                                            <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                                                    Credit Card (Stripe)
-                                                    <img src="assets/images/payments-summary.png" alt="payments cards">
-                                                </a>
-                                            </h2>
-                                        </div>
-                                        <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
-                                            <div class="card-body"> Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-                                            </div>
-                                        </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" value="cash" id="Cashondelivery" name="payement_method" required class="custom-control-input">
+                                        <label class="custom-control-label" for="Cashondelivery">Paiement à la livraison</label>
                                     </div>
+
+                                    <div class="custom-control custom-radio" style="margin-top: 0px;">
+                                        <input type="radio" value="paypal" id="paypal" name="payement_method" required class="custom-control-input">
+                                        <label class="custom-control-label" for="paypal">PayPal</label>
+                                    </div>
+
+                                    <div class="custom-control custom-radio" style="margin-top: 0px;">
+                                        <input type="radio" value="stripe" id="CreditCard" name="payement_method" required class="custom-control-input">
+                                        <label class="custom-control-label" for="CreditCard">Credit Card (Stripe)</label>
+                                    </div>
+
                                 </div>
 
                                 <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                     <span class="btn-text">Place Order</span>
                                     <span class="btn-hover-text">Proceed to Checkout</span>
                                 </button>
+                                <br><br/>
+                                <img src="{{ url('assets/images/payments-summary.png')}}">
                             </div>
                         </aside>
                     </div>
