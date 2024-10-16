@@ -110,6 +110,12 @@ Route::get('/', [HomeController::class, 'home']);
 
 Route::post('auth_register', [AuthController::class, 'auth_register']);
 Route::post('auth_login', [AuthController::class, 'auth_login']);
+
+Route::get('forgot-password', [AuthController::class, 'forgot_password']);
+Route::post('forgot-password', [AuthController::class, 'auth_forgot_password']);
+Route::get('reset/{token}', [AuthController::class, 'reset']);
+Route::post('reset/{token}', [AuthController::class, 'auth_reset']);
+
 Route::get('active/{id}', [AuthController::class, 'active_email']);
 
 Route::get('cart', [PaymentController::class, 'cart']);

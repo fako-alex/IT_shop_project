@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisterMail;
+use Illuminate\Support\Str;
+use App\Mail\ForgotPasswordMail;
+
+
 
 class AuthController extends Controller
 {
@@ -163,6 +167,7 @@ class AuthController extends Controller
     }
     
     public function active_email($id){
+
         $id = base64_decode($id);
         $user = User::getSingle($id);
         $user->email_verified_at = date('Y-m-d H:i:s');
@@ -170,5 +175,50 @@ class AuthController extends Controller
         return redirect(url(''))->with('success', "Compte vérifier avec succès.");
     }
 
+    public function forgot_password(Request $request){
+
+        $data['meta_title'] = "Mot de passe oublié";
+        return view('auth.forgot', $data);
+    }
+
+    public function auth_forgot_password(Request $request){
+        $user = User::where('email', '=', $request->email)->first();
+        if(!empty($user)){
+            $user->remember_token = Str::random(30);
+            $user->save();
+
+            Mail::to($user->email)->send(new ForgotPasswordMail($user));
+
+            return redirect()->back()->with('success', 'Un e-mail de réinitialisation a été envoyé à votre adresse email.');
+        }else{
+            return redirect()->back()->with('error', 'Cette adresse email est invalide.');
+        }
+    }
+
+    public function reset($token){
+        $user = User::where('remember_token', '=', $token)->first();
+        if(!empty($user)){
+
+            $data['user'] = $user;
+            $data['meta_title'] = "Réinitialiser le mot de passe";
+
+            return view('auth.reset', $data);
+        }else{
+            abort(404);
+        }
+    }
     
+    public function auth_reset($token, Request $request) {
+        if($request->password == $request->cpassword){
+            $user = User::where('remember_token', '=', $token)->first();
+            $user->password = Hash::make($request->password);
+            $user->remember_token = Str::random(30);
+            $user->email_verified_at = date('Y-m-d H:i:s');
+            $user->save();
+
+            return redirect(url(''))->with('success', 'Votre mot de passe a été réinitialisé avec succès.');
+        }else{
+            return redirect()->back()->with('error', 'Les mots de passe ne sont pas identiques.');
+        }
+    }
 }

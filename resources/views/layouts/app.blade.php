@@ -85,7 +85,7 @@
                                                 <input type="checkbox" name="is_remember" class="custom-control-input" id="signin-remember">
                                                 <label class="custom-control-label" for="signin-remember">Se souvenir de moi</label>
                                             </div>
-                                            <a href="#" class="forgot-link">Mot de passe oublié?</a>
+                                            <a href="{{ url('forgot-password')}}" class="forgot-link">Mot de passe oublié?</a>
                                         </div>
                                     </form>
                                 </div>
