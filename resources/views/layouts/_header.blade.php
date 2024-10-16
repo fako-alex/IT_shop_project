@@ -32,7 +32,11 @@
                             <li><a href="{{ url('wishlist')}}"><i class="icon-heart-o"></i>Mes favoris <span>(3)</span></a></li>
                             <li><a href="{{ url('about')}}">Apropos de nous</a></li>
                             <li><a href="{{ url('contact')}}">Contactez-Nous</a></li>
-                            <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Connexion</a></li>
+                            @if(!empty(Auth::check()))
+                                <li><a href="{{ url('admin/logout')}}"><i class="icon-user"></i>Se déconnecter</a></li>
+                            @else
+                                <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Connexion</a></li>
+                            @endif
                         </ul>
                     </li>
                 </ul>

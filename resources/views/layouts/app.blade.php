@@ -63,15 +63,16 @@
                             {{-- Connexion utilisateur --}}
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    <form action="#">
+                                    <form action="" id="SubmitFormLogin" method="post">
+                                        {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="singin-email">Nom d'utilisateur ou adresse e-mail *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="email" required>
+                                            <label for="signin-email">Adresse E-mail *</label>
+                                            <input type="text" class="form-control" id="signin-email" name="email" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="singin-password">Mot de passe *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="password" required>
+                                            <label for="signin-password">Mot de passe *</label>
+                                            <input type="password" class="form-control" id="signin-password" name="password" required>
                                         </div>
 
                                         <div class="form-footer">
@@ -81,7 +82,7 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                                <input type="checkbox" name="is_remember" class="custom-control-input" id="signin-remember">
                                                 <label class="custom-control-label" for="signin-remember">Se souvenir de moi</label>
                                             </div>
                                             <a href="#" class="forgot-link">Mot de passe oublié?</a>
@@ -132,6 +133,35 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            // pour la connexion
+            $('body').on('submit', '#SubmitFormLogin', function(e) {
+                e.preventDefault(); 
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('auth_login') }}",  
+                    data: $(this).serialize(),  
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Ajoute le token CSRF
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.status == true) {
+                            location.reload(); // Recharger la page si l'utilisateur est créé avec succès
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function(response) {
+                        if (response.status === 400) {
+                            alert(response.responseJSON.message);
+                        } else {
+                            alert('Erreur lors de la connexion. Veuillez réessayer.');
+                        }
+                    }
+                });
+            });
+
+            //pour les inscriptions
             $('body').on('submit', '#SubmitFormRegister', function(e) {
                 e.preventDefault(); 
                 $.ajax({
@@ -144,18 +174,14 @@
                     dataType: "json",
                     success: function(data) {
                         alert(data.message);
-                        // Vérifiez si la réponse indique le succès
-                        if (data.message === 'Utilisateur créé avec succès!') {
-                            location.reload(); // Recharger la page si l'utilisateur est créé avec succès
+                        if (data.message === 'Compte créé avec succès!') {
+                            location.reload();
                         }
                     },
                     error: function(response) {
-                        // Afficher le message d'erreur retourné par le serveur
                         if (response.status === 400) {
-                            // Afficher l'erreur spécifique lorsque l'email existe déjà
                             alert(response.responseJSON.message);
                         } else {
-                            // Gérer d'autres types d'erreurs si nécessaire
                             alert('Erreur lors de l\'inscription. Veuillez réessayer.');
                         }
                     }
@@ -164,9 +190,6 @@
         });
     </script>
     
-    
-    
-
     @yield('script')
     <script src="{{ url('assets/js/main.js')}}"></script>
 </body>
