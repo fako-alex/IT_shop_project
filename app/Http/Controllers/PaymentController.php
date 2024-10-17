@@ -122,6 +122,31 @@ class PaymentController extends Controller
 
     public function place_order(Request $request){
         
+        $getShipping = ShippingChargeModel::getSingle($request->shipping);
+        $payable_total = Cart::getSubTotal();
+        $discount_amount = 0;
+        $discount_code = '';
+
+        if(!empty($request->discount_code)){
+
+            $getDiscount = DiscountCodeModel::checkDiscount($request->discount_code);
+
+            if(!empty($request->discount_code)){
+                $discount_code = $request->discount_code;
+
+                if($getDiscount->type == 'Amount'){
+                    $discount_amount = $getDiscount->percent_amount;
+                    $payable_total = $payable_total - $getDiscount->percent_amount;
+                }
+                else{
+                    $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
+                    $payable_total = $payable_total - $discount_amount;
+                }
+            }
+        }
+        $shipping_amount = !empty($getShipping->price) ? $getShipping->price : 0;
+        $total_amount = $payable_total + $shipping_amount;
+
         $orders = new OrderModel;
         $orders->first_name = trim($request->first_name);
         $orders->last_name = trim($request->last_name);
@@ -135,8 +160,11 @@ class PaymentController extends Controller
         $orders->phone = trim($request->phone);
         $orders->email = trim($request->email);
         $orders->notes = trim($request->notes);
-        $orders->discount_code = trim($request->discount_code);   
-        $orders->shipping_amount = trim($request->shipping_amount); 
+        $orders->discount_code = trim($discount_code);   
+        $orders->discount_amount = trim($discount_amount);   
+        $orders->shipping_id = trim($request->shipping); 
+        $orders->shipping_amount = trim($shipping_amount); 
+        $orders->total_amount = trim($total_amount); 
         $orders->payment_method = trim($request->payment_method);
         $orders->save();
         
@@ -166,6 +194,7 @@ class PaymentController extends Controller
             $order_item->save();
         }
 
+        die;
     }
 
 }
