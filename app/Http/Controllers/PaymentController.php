@@ -9,6 +9,9 @@ use App\Models\ProductSizeModel;
 use App\Models\DiscountCodeModel;
 use App\Models\ShippingChargeModel;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
+use App\Models\OrderModel;
+use App\Models\OrderItemModel;
+use App\Models\ColorModel;
 
 
 class PaymentController extends Controller
@@ -118,7 +121,51 @@ class PaymentController extends Controller
     }
 
     public function place_order(Request $request){
-        dd($request->all());
+        
+        $orders = new OrderModel;
+        $orders->first_name = trim($request->first_name);
+        $orders->last_name = trim($request->last_name);
+        $orders->company_name = trim($request->company_name);
+        $orders->county = trim($request->county);
+        $orders->address_one = trim($request->address_one);
+        $orders->address_two = trim($request->address_two);
+        $orders->city = trim($request->city);
+        $orders->state = trim($request->state);
+        $orders->postcode = trim($request->postcode);
+        $orders->phone = trim($request->phone);
+        $orders->email = trim($request->email);
+        $orders->notes = trim($request->notes);
+        $orders->discount_code = trim($request->discount_code);   
+        $orders->shipping_amount = trim($request->shipping_amount); 
+        $orders->payment_method = trim($request->payment_method);
+        $orders->save();
+        
+        foreach(Cart::getContent() as $key => $cart){
+           
+            $order_item = new OrderItemModel;
+            $order_item->order_id = $orders->id;
+            $order_item->product_id = $cart->id;
+            $order_item->quantity = $cart->quantity;
+            $order_item->price = $cart->price;
+
+            $color_id = $cart->attributes->color_id;
+            if(!empty($color_id)){
+
+                $getColor = ColorModel::getSingle($cart->attributes->color_id);
+                $order_item->color_name = $getColor->name;
+            }
+
+            $size_id = $cart->attributes->size_id;
+            if(!empty($size_id)){
+
+                $getSize = ProductSizeModel::getSingle($size_id);
+                $order_item->size_name = $getSize->name;
+                $order_item->size_amount = $getSize->price;
+            }
+            $order_item->total_price = $cart->price;
+            $order_item->save();
+        }
+
     }
 
 }
