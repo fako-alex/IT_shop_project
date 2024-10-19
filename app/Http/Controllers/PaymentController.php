@@ -12,6 +12,8 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\OrderModel;
 use App\Models\OrderItemModel;
 use App\Models\ColorModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 
 class PaymentController extends Controller
@@ -122,79 +124,114 @@ class PaymentController extends Controller
 
     public function place_order(Request $request){
         
-        $getShipping = ShippingChargeModel::getSingle($request->shipping);
-        $payable_total = Cart::getSubTotal();
-        $discount_amount = 0;
-        $discount_code = '';
+        $validate = 0;
+        $message = '';
+        if(!empty($request->is_create)){
+            $checkEmail = User::checkEmail($request->email);
+            if(!empty($checkEmail)){
+                $message = 'Cette Addresse Email est déjà utilisé pour un compte';
+                $validate = 1;
+            }else{
+                $save = new User;
+                $save->name = trim($request->first_name);
+                $save->email = trim($request->email);
+                $save->password = Hash::make($request->password);
+                $save->save();
 
-        if(!empty($request->discount_code)){
+                $user_id = $save->id;
+            }
+        }else{
+            $user_id = '';
+        }
+        // dd($request->all());
 
-            $getDiscount = DiscountCodeModel::checkDiscount($request->discount_code);
+        if(empty($validate)){
+            $getShipping = ShippingChargeModel::getSingle($request->shipping);
+            $payable_total = Cart::getSubTotal();
+            $discount_amount = 0;
+            $discount_code = '';
 
             if(!empty($request->discount_code)){
-                $discount_code = $request->discount_code;
 
-                if($getDiscount->type == 'Amount'){
-                    $discount_amount = $getDiscount->percent_amount;
-                    $payable_total = $payable_total - $getDiscount->percent_amount;
+                $getDiscount = DiscountCodeModel::checkDiscount($request->discount_code);
+
+                if(!empty($request->discount_code)){
+                    $discount_code = $request->discount_code;
+
+                    if($getDiscount->type == 'Amount'){
+                        $discount_amount = $getDiscount->percent_amount;
+                        $payable_total = $payable_total - $getDiscount->percent_amount;
+                    }
+                    else{
+                        $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
+                        $payable_total = $payable_total - $discount_amount;
+                    }
                 }
-                else{
-                    $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
-                    $payable_total = $payable_total - $discount_amount;
+            }
+            $shipping_amount = !empty($getShipping->price) ? $getShipping->price : 0;
+            $total_amount = $payable_total + $shipping_amount;
+
+            $orders = new OrderModel;
+
+            if(!empty($user_id)){
+                $orders->user_id = trim($user_id);
+            }
+
+            $orders->first_name = trim($request->first_name);
+            $orders->last_name = trim($request->last_name);
+            $orders->company_name = trim($request->company_name);
+            $orders->county = trim($request->county);
+            $orders->address_one = trim($request->address_one);
+            $orders->address_two = trim($request->address_two);
+            $orders->city = trim($request->city);
+            $orders->state = trim($request->state);
+            $orders->postcode = trim($request->postcode);
+            $orders->phone = trim($request->phone);
+            $orders->email = trim($request->email);
+            $orders->notes = trim($request->notes);
+            $orders->discount_code = trim($discount_code);   
+            $orders->discount_amount = trim($discount_amount);   
+            $orders->shipping_id = trim($request->shipping); 
+            $orders->shipping_amount = trim($shipping_amount); 
+            $orders->total_amount = trim($total_amount); 
+            $orders->payment_method = trim($request->payment_method);
+            $orders->save();
+            
+            foreach(Cart::getContent() as $key => $cart){
+            
+                $order_item = new OrderItemModel;
+                $order_item->order_id = $orders->id;
+                $order_item->product_id = $cart->id;
+                $order_item->quantity = $cart->quantity;
+                $order_item->price = $cart->price;
+
+                $color_id = $cart->attributes->color_id;
+                if(!empty($color_id)){
+
+                    $getColor = ColorModel::getSingle($cart->attributes->color_id);
+                    $order_item->color_name = $getColor->name;
                 }
+
+                $size_id = $cart->attributes->size_id;
+                if(!empty($size_id)){
+
+                    $getSize = ProductSizeModel::getSingle($size_id);
+                    $order_item->size_name = $getSize->name;
+                    $order_item->size_amount = $getSize->price;
+                }
+                $order_item->total_price = $cart->price;
+                $order_item->save();
             }
+            $json['status'] = 'true';
+            $json['message'] = "Enregistrement effectué avec succès.";
+            // $json['message'] = 'Veuillez remplir tous les champs obligatoires';
+
+        }else{
+            $json['status'] = 'false';
+            $json['message'] = $message;
+            // $json['message'] = 'Veuillez remplir tous les champs obligatoires';
         }
-        $shipping_amount = !empty($getShipping->price) ? $getShipping->price : 0;
-        $total_amount = $payable_total + $shipping_amount;
-
-        $orders = new OrderModel;
-        $orders->first_name = trim($request->first_name);
-        $orders->last_name = trim($request->last_name);
-        $orders->company_name = trim($request->company_name);
-        $orders->county = trim($request->county);
-        $orders->address_one = trim($request->address_one);
-        $orders->address_two = trim($request->address_two);
-        $orders->city = trim($request->city);
-        $orders->state = trim($request->state);
-        $orders->postcode = trim($request->postcode);
-        $orders->phone = trim($request->phone);
-        $orders->email = trim($request->email);
-        $orders->notes = trim($request->notes);
-        $orders->discount_code = trim($discount_code);   
-        $orders->discount_amount = trim($discount_amount);   
-        $orders->shipping_id = trim($request->shipping); 
-        $orders->shipping_amount = trim($shipping_amount); 
-        $orders->total_amount = trim($total_amount); 
-        $orders->payment_method = trim($request->payment_method);
-        $orders->save();
-        
-        foreach(Cart::getContent() as $key => $cart){
-           
-            $order_item = new OrderItemModel;
-            $order_item->order_id = $orders->id;
-            $order_item->product_id = $cart->id;
-            $order_item->quantity = $cart->quantity;
-            $order_item->price = $cart->price;
-
-            $color_id = $cart->attributes->color_id;
-            if(!empty($color_id)){
-
-                $getColor = ColorModel::getSingle($cart->attributes->color_id);
-                $order_item->color_name = $getColor->name;
-            }
-
-            $size_id = $cart->attributes->size_id;
-            if(!empty($size_id)){
-
-                $getSize = ProductSizeModel::getSingle($size_id);
-                $order_item->size_name = $getSize->name;
-                $order_item->size_amount = $getSize->price;
-            }
-            $order_item->total_price = $cart->price;
-            $order_item->save();
-        }
-
-        die;
+        echo json_encode($json);
     }
 
 }

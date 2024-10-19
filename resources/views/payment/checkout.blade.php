@@ -24,7 +24,7 @@
         <div class="checkout">
             <div class="container">
                 
-                <form action="{{ url('checkout/place_order')}}" method="post">
+                <form action="" id="SubmitForm" method="POST">
                     {{csrf_field()}}
                     <div class="row">
                         <div class="col-lg-9">
@@ -79,10 +79,28 @@
                             <label>Adresse e-mail <span style="color: red">*</span></label>
                             <input type="email" name="email" class="form-control" required>
                         
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="checkout-create-acc">
+                                <input type="checkbox" name="is_create" class="custom-control-input createAccount" id="checkout-create-acc">
                                 <label class="custom-control-label" for="checkout-create-acc">Créer un compte ?</label>
                             </div><!-- End .custom-checkbox -->
+                            
+                            <div id="showPassword" style="display: none">
+                                <label>Mot de passe<span style="color: red">*</span></label>
+                                <input type="text" name="password" id="inputPassword" class="form-control">
+                            </div>
                         
                             <label>Notes de commande (facultatif)</label>
                             <textarea class="form-control" name="notes" cols="30" rows="4" placeholder="Notes concernant votre commande, par exemple, des instructions spéciales pour la livraison"></textarea>
@@ -208,6 +226,43 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $('#SubmitForm').on('submit', function(e) {
+            e.preventDefault();
+            //console.log("Submitting form...");
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/place_order') }}",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(data) {
+                    alert(data.message);
+                    if (data.status == false) {
+                        alert(data.message);
+                    }
+                },
+                error: function(data) {
+                    // console.error(data); // Affichez les erreurs dans la console
+                    // alert("Une erreur s'est produite. Veuillez réessayer.");
+                }
+            });
+        });
+
+
+        // Gestion de la création du compte
+        $('body').on('change', '.createAccount', function() {
+            if(this.checked){
+                $('#showPassword').show();
+                $("inputPassword").prop('required', true);
+            }else{
+                $('#showPassword').hide();
+                $("inputPassword").prop('required', false);
+            }
+        });
+
         // Gestion de la sélection du frais d'expédition
         $('body').on('change', '.getShippingCharge', function() {
             var price = parseFloat($(this).attr('data-price')) || 0; // Récupère le prix ou 0 s'il est vide
