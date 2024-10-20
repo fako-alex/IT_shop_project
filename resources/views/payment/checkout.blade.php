@@ -90,18 +90,19 @@
 
 
 
+                            @if(empty(Auth::check()))
 
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="is_create" class="custom-control-input createAccount" id="checkout-create-acc">
+                                    <label class="custom-control-label" for="checkout-create-acc">Créer un compte ?</label>
+                                </div><!-- End .custom-checkbox -->
+                                
+                                <div id="showPassword" style="display: none">
+                                    <label>Mot de passe<span style="color: red">*</span></label>
+                                    <input type="text" name="password" id="inputPassword" class="form-control">
+                                </div>
+                            @endif
 
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="is_create" class="custom-control-input createAccount" id="checkout-create-acc">
-                                <label class="custom-control-label" for="checkout-create-acc">Créer un compte ?</label>
-                            </div><!-- End .custom-checkbox -->
-                            
-                            <div id="showPassword" style="display: none">
-                                <label>Mot de passe<span style="color: red">*</span></label>
-                                <input type="text" name="password" id="inputPassword" class="form-control">
-                            </div>
-                        
                             <label>Notes de commande (facultatif)</label>
                             <textarea class="form-control" name="notes" cols="30" rows="4" placeholder="Notes concernant votre commande, par exemple, des instructions spéciales pour la livraison"></textarea>
                         </div><!-- End .col-lg-9 -->

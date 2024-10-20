@@ -14,6 +14,8 @@ use App\Models\OrderItemModel;
 use App\Models\ColorModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class PaymentController extends Controller
@@ -126,24 +128,29 @@ class PaymentController extends Controller
         
         $validate = 0;
         $message = '';
-        if(!empty($request->is_create)){
-            $checkEmail = User::checkEmail($request->email);
-            if(!empty($checkEmail)){
-                $message = 'Cette Addresse Email est déjà utilisé pour un compte';
-                $validate = 1;
-            }else{
-                $save = new User;
-                $save->name = trim($request->first_name);
-                $save->email = trim($request->email);
-                $save->password = Hash::make($request->password);
-                $save->save();
 
-                $user_id = $save->id;
-            }
+        if(!empty(Auth::check())){
+            $user_id = Auth::user()->id;
         }else{
-            $user_id = '';
+            if(!empty($request->is_create)){
+                $checkEmail = User::checkEmail($request->email);
+                if(!empty($checkEmail)){
+                    $message = 'Cette Addresse Email est déjà utilisé pour un compte';
+                    $validate = 1;
+                }else{
+                    $save = new User;
+                    $save->name = trim($request->first_name);
+                    $save->email = trim($request->email);
+                    $save->password = Hash::make($request->password);
+                    $save->save();
+    
+                    $user_id = $save->id;
+                }
+            }else{
+                $user_id = '';
+            }
         }
-        // dd($request->all());
+
 
         if(empty($validate)){
             $getShipping = ShippingChargeModel::getSingle($request->shipping);
