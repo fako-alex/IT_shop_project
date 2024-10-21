@@ -191,17 +191,17 @@
                                 <div class="accordion-summary" id="accordion-payment">
 
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" value="cash" id="Cashondelivery" name="payement_method" required class="custom-control-input">
+                                        <input type="radio" value="cash" id="Cashondelivery" name="payment_method" required class="custom-control-input">
                                         <label class="custom-control-label" for="Cashondelivery">Paiement à la livraison</label>
                                     </div>
 
                                     <div class="custom-control custom-radio" style="margin-top: 0px;">
-                                        <input type="radio" value="paypal" id="paypal" name="payement_method" required class="custom-control-input">
+                                        <input type="radio" value="paypal" id="paypal" name="payment_method" required class="custom-control-input">
                                         <label class="custom-control-label" for="paypal">PayPal</label>
                                     </div>
 
                                     <div class="custom-control custom-radio" style="margin-top: 0px;">
-                                        <input type="radio" value="stripe" id="CreditCard" name="payement_method" required class="custom-control-input">
+                                        <input type="radio" value="stripe" id="CreditCard" name="payment_method" required class="custom-control-input">
                                         <label class="custom-control-label" for="CreditCard">Credit Card (Stripe)</label>
                                     </div>
 
@@ -240,9 +240,10 @@
                 contentType: false,
                 dataType: 'json',
                 success: function(data) {
-                    alert(data.message);
                     if (data.status == false) {
                         alert(data.message);
+                    }else{
+                        window.location.href = data.redirect;
                     }
                 },
                 error: function(data) {

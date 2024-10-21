@@ -230,7 +230,8 @@ class PaymentController extends Controller
                 $order_item->save();
             }
             $json['status'] = 'true';
-            $json['message'] = "Enregistrement effectué avec succès.";
+            $json['message'] = "success";
+            $json['redirect'] = url('checkout/payment?order_id='.base64_encode($orders->id));
             // $json['message'] = 'Veuillez remplir tous les champs obligatoires';
 
         }else{
@@ -239,6 +240,29 @@ class PaymentController extends Controller
             // $json['message'] = 'Veuillez remplir tous les champs obligatoires';
         }
         echo json_encode($json);
+    } 
+
+    public function checkout_payment(Request $request){
+        if(!empty(Cart::getSubTotal()) && !empty($request->order_id)){
+            $order_id = base64_decode($request->order_id);
+            $getOrder = OrderModel::getSingle($order_id);
+            if(!empty($getOrder)){
+                if($getOrder->payment_method == 'cash'){
+                    $getOrder->is_payment = 1;
+                    $getOrder->save();
+
+                    Cart::clear();
+
+                    return redirect('cart')->with('success', "Commande placée avec succès");
+                }
+                elseif($getOrder->payment_method == 'paypal'){}
+                elseif($getOrder->payment_method == 'stripe'){}
+            }else{
+                abort(404);
+            }
+        }else{
+            abort(404);
+        }
     }
 
 }
