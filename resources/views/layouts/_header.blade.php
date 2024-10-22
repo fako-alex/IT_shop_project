@@ -166,8 +166,8 @@
                             </div>
 
                             <div class="dropdown-cart-action">
-                                <a href="{{ url('cart')}} " class="btn btn-primary">voir le panier</a>
-                                <a href="{{ url('checkout')}}" class="btn btn-outline-primary-2"><span>Vérifier</span><i class="icon-long-arrow-right"></i></a>
+                                <a href="{{ url('cart')}} " class="btn btn-primary">Panier</a> 
+                                <a href="{{ url('checkout')}}" class="btn btn-outline-primary-2"><span>Commander</span><i class="icon-long-arrow-right"></i></a>
                             </div>
                         </div>
                     @endif

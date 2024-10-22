@@ -13,9 +13,9 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('')}}">Accueil</a></li>
                 <li class="breadcrumb-item"><a href="#">Boutique</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Vérifier</li>
+                <li class="breadcrumb-item active" aria-current="page">Commander</li>
             </ol>
         </div>
     </nav>

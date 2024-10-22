@@ -255,7 +255,27 @@ class PaymentController extends Controller
 
                     return redirect('cart')->with('success', "Commande placée avec succès");
                 }
-                elseif($getOrder->payment_method == 'paypal'){}
+                elseif($getOrder->payment_method == 'paypal'){
+                    
+                    $query                  = array();
+                    // $query['business']      = "vipulbusinee1@gmail.com";
+                    $query['business']      = "sb-toto@business.example.com";
+                    $query['cmd']           = '_xclick';
+                    $query['item_name']     = "E-commerce";
+                    $query['no_shipping']   = '1';
+                    $query['item_number']   = $getOrder->id;
+                    $query['amount']        = $getOrder->total_amount;
+                    $query['currency_code'] = 'USD'; //pour la devise XAF USD
+                    $query['cancel_return'] = url('checkout');
+                    $query['return']        = url('paypal/success-payment');
+
+                    $query_string = http_build_query($query);
+
+                    header('Location: https://www.sandbox.paypal.com/cgi-bin/webscr?'.$query_string);
+                    //return redirect()->away('https://www.sandbox.paypal.com/cgi-bin/webscr?' . $query_string);
+
+                   exit();
+                }
                 elseif($getOrder->payment_method == 'stripe'){}
             }else{
                 abort(404);
@@ -263,6 +283,30 @@ class PaymentController extends Controller
         }else{
             abort(404);
         }
+    }
+
+    public function paypal_success_payment(Request $request){
+
+        if(!empty($request->item_number) && !empty($request->st) && $request->st =='completed'){
+            $getOrder = OrderModel::getSingle($request->item_number);
+            if(!empty($getOrder)){
+                $getOrder->is_payment = 1;
+                $getOrder->transaction_id = $request->tx;
+                $getOrder->payment_data = json_encode($request->all());
+                $getOrder->save();
+
+                Cart::clear();
+
+                return redirect('cart')->with('success', "Commande placée avec succès");
+            
+            }else{
+                abort(404);
+            }
+        }else{
+            abort(404);
+        }
+        // dd($request->all());
+       // return redirect('cart')->with('success', "Paiement effectué avec succès");
     }
 
 }
