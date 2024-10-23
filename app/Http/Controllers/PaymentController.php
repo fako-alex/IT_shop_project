@@ -261,7 +261,7 @@ class PaymentController extends Controller
                     
                     $query                  = array();
                     // $query['business']      = "vipulbusinee1@gmail.com";
-                    $query['business']      = "vipulbusinee1@gmail.com";
+                    $query['business']      = "sb-toto@business.example.com";
                     $query['cmd']           = '_xclick';
                     $query['item_name']     = "E-commerce";
                     $query['no_shipping']   = '1';
@@ -275,7 +275,6 @@ class PaymentController extends Controller
 
                     header('Location: https://www.sandbox.paypal.com/cgi-bin/webscr?'.$query_string);
                     //header('Location: https://www.paypal.com/cgi-bin/webscr?'.$query_string); pour rediriger vers le bon compte paypal vid 63
-
                    exit();
                 }
                 elseif($getOrder->payment_method == 'stripe'){
