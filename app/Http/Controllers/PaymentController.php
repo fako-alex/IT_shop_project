@@ -259,20 +259,20 @@ class PaymentController extends Controller
                     
                     $query                  = array();
                     // $query['business']      = "vipulbusinee1@gmail.com";
-                    $query['business']      = "sb-toto@business.example.com";
+                    $query['business']      = "vipulbusinee1@gmail.com";
                     $query['cmd']           = '_xclick';
                     $query['item_name']     = "E-commerce";
                     $query['no_shipping']   = '1';
                     $query['item_number']   = $getOrder->id;
                     $query['amount']        = $getOrder->total_amount;
-                    $query['currency_code'] = 'USD'; //pour la devise XAF USD
+                    $query['currency_code'] = 'USD'; //pour les devices de paypal : USD (Dollar américain) EUR (Euro) GBP (Livre sterling)  CAD (Dollar canadien)
                     $query['cancel_return'] = url('checkout');
                     $query['return']        = url('paypal/success-payment');
 
                     $query_string = http_build_query($query);
 
                     header('Location: https://www.sandbox.paypal.com/cgi-bin/webscr?'.$query_string);
-                    //return redirect()->away('https://www.sandbox.paypal.com/cgi-bin/webscr?' . $query_string);
+                    //header('Location: https://www.paypal.com/cgi-bin/webscr?'.$query_string); pour rediriger vers le bon compte paypal vid 63
 
                    exit();
                 }
@@ -286,10 +286,11 @@ class PaymentController extends Controller
     }
 
     public function paypal_success_payment(Request $request){
-
+        dd($request->all());
         if(!empty($request->item_number) && !empty($request->st) && $request->st =='completed'){
             $getOrder = OrderModel::getSingle($request->item_number);
             if(!empty($getOrder)){
+                
                 $getOrder->is_payment = 1;
                 $getOrder->transaction_id = $request->tx;
                 $getOrder->payment_data = json_encode($request->all());
