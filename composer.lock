@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bc9546aa9786ec98b800519fd650cd4",
+    "content-hash": "e5c1391662fd3611f5d6b98453376599",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -3857,16 +3857,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v15.0.0",
+            "version": "v16.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "96f0dbe9c2b5365d716f86d92a27feecca2cbaee"
+                "reference": "524ae42483d7434dfaecb0076e32e5cb521f6bb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/96f0dbe9c2b5365d716f86d92a27feecca2cbaee",
-                "reference": "96f0dbe9c2b5365d716f86d92a27feecca2cbaee",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/524ae42483d7434dfaecb0076e32e5cb521f6bb7",
+                "reference": "524ae42483d7434dfaecb0076e32e5cb521f6bb7",
                 "shasum": ""
             },
             "require": {
@@ -3910,9 +3910,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v15.0.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v16.1.1"
             },
-            "time": "2024-06-24T23:05:11+00:00"
+            "time": "2024-10-18T18:42:52+00:00"
         },
         {
             "name": "symfony/console",
