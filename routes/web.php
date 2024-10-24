@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\DiscountCodeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ShippingChargeController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,10 @@ Route::group(['middleware'=>'admin'], function(){
     Route::get('admin/category/edit/{id}', [CategoryController::class, 'edit']);
     Route::post('admin/category/edit/{id}', [CategoryController::class, 'update']);
     Route::get('admin/category/delete/{id}', [CategoryController::class, 'delete']);
+    // FIN
+
+    // POUR LES COMMANDES
+    Route::get('admin/orders/list', [OrderController::class, 'list']);
     // FIN
     
     // POUR LES CATEGORIES

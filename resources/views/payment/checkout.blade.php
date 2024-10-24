@@ -47,9 +47,9 @@
                             <label>Pays <span style="color: red">*</span></label>
                             <input type="text" name="county" class="form-control" required>
                         
-                            <label>Adresse 1<span style="color: red">*</span></label>
+                            <label>Addresse 1<span style="color: red">*</span></label>
                             <input type="text" name="address_one" class="form-control" required>
-                            <label>Adresse 2</label>
+                            <label>Addresse 2</label>
                             <input type="text" name="address_two" class="form-control">
                         
                             <div class="row">

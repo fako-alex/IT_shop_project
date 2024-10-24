@@ -92,6 +92,14 @@
               </ul>
             </li>
 
+            <li class="nav-item">
+              <a href="{{url ('admin/orders/list')}}" class="nav-link @if(Request::segment(2) == 'orders') active @endif">
+                <i class="nav-icon fas fa-hospital"></i>
+                <p>
+                  Liste des Commandes
+                </p>
+              </a>
+            </li>  
 
             <!-- Gestion des sous catégories de produits-->
             <li class="nav-item">
@@ -274,12 +282,12 @@
 
             <li class="nav-item">
               <a href="#" class="nav-link @if(Request::segment(2) == 'product') active @endif">
-              <i class="nav-icon fas fa-hospital"></i>
-              <p>
+                <i class="nav-icon fas fa-hospital"></i>
+                <p>
                   ................
-              </p>
+                </p>
               </a>
-          </li>  
+            </li>  
             
             
 

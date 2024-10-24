@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Session;
 
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
+
 
 
 class PaymentController extends Controller
@@ -258,7 +260,12 @@ class PaymentController extends Controller
                     return redirect('cart')->with('success', "Commande placée avec succès");
                 }
                 elseif($getOrder->payment_method == 'paypal'){
-                    
+                    // ajout 
+                    // $provider = new PayPalClient;
+                    // $provider->setApiCredentials(config('paypal'));
+                    // $paypalToken = $provider->getAccessToken();
+                    // fin ajout
+
                     $query                  = array();
                     // $query['business']      = "vipulbusinee1@gmail.com";
                     $query['business']      = "sb-toto@business.example.com";
