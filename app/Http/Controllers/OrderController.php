@@ -17,4 +17,12 @@ class OrderController extends Controller
         // Passer la variable $data à la vue
         return view('admin.order.list', $data);
     }
+
+    public function order_detail($id){
+        $data['getRecord'] = OrderModel::getSingle($id);
+        $data['header_title'] = 'Détail Commandes';
+
+        // Passer la variable $data à la vue
+        return view('admin.order.detail', $data);
+    }
 }

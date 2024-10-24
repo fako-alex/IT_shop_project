@@ -68,9 +68,11 @@
                           <td>{{number_format($value->shipping_amount, 2)}}</td>
                           <td>{{number_format($value->total_amount, 2)}}</td>
                           <td style="text-transform: capitalize;">{{$value->payment_method}}</td>
-                          <td>{{($value->status ==0) ? 'Actif' : 'Inactif'}}</td>
+                          <td>{{($value->status == 0) ? 'Actif' : 'Inactif'}}</td>
                           <td>{{date('d-m-y h:i A', strtotime($value->created_at))}}</td>
-                          <td></td>                          
+                          <td>
+                            <a href="{{url('admin/orders/detail/'.$value->id)}}" class="btn btn-primary">Détaail</a>
+                          </td>                          
                         </tr>
                         
                         @endforeach
