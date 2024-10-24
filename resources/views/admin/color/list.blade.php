@@ -43,7 +43,8 @@
                       <tbody>
                         @foreach($getRecord as $value)
                         <tr>
-                          <td>{{$value->id}}</td>
+                          {{-- <td>{{$value->id}}</td> --}}
+                          <td>{{ $loop->index + 1 }}</td>
                           <td>{{$value->name}}</td>
                           <td>{{$value->code}}</td>
                           <td>{{$value->status}}</td>

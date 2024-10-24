@@ -27,7 +27,6 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          {{-- <th>ID Transaction </th> --}}
                           <th>Nom </th>
                           <th>Nom Entreprise</th>
                           <th>Pays</th>
@@ -52,8 +51,8 @@
                       <tbody>
                         @foreach($getRecord as $value)
                         <tr>
-                          <td>{{$value->id}}</td>
-                          {{-- <td>{{$value->transaction_id}}</td> --}}
+                          {{-- <td>{{$value->id}}</td> --}}
+                          <td>{{ $loop->index + 1 }}</td>
                           <td>{{$value->first_name}} {{$value->last_name}}</td>
                           <td>{{$value->company_name}}</td>
                           <td>{{$value->county}}</td>

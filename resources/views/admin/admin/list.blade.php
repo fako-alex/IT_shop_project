@@ -40,7 +40,8 @@
                       <tbody>
                         @foreach($getRecord as $value)
                         <tr>
-                          <td>{{$value->id}}</td>
+                          {{-- <td>{{$value->id}}</td> --}}
+                          <td>{{ $loop->index + 1 }}</td>
                           <td>{{$value->name}}</td>
                           <td>{{$value->email}}</td>
                           <td>{{($value->status ==0) ? 'Actif' : 'Inactif'}}</td>
